@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Steadfast Senior Services – Inquiries & Bookings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy:   #1a3a5c;
+      --blue:   #2c5f8a;
+      --gold:   #f0a500;
+      --gold2:  #f5c030;
+      --bg:     #f0f4f8;
+      --text:   #2d3748;
+      --subtle: #5a6a7e;
+      --card:   #f7faff;
+      --border: #dde8f5;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Open Sans', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--navy);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+
+    .nav-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      height: 64px;
+    }
+
+    .nav-logo {
+      font-family: 'Merriweather', serif;
+      font-size: 17px;
+      font-weight: 900;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .nav-logo span { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      gap: 2px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: 8px 15px;
+      color: #b8d4f0;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .nav-links a:hover  { background: rgba(255,255,255,0.10); color: white; }
+    .nav-links a.active { background: rgba(255,255,255,0.12); color: var(--gold); }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 26px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      max-width: 980px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 40px 24px;
+    }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+      border-radius: 14px;
+      padding: 48px 48px 40px;
+      color: white;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      font-family: 'Merriweather', serif;
+      font-size: 32px;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    .hero p {
+      font-size: 15.5px;
+      color: #b8d4f0;
+      line-height: 1.7;
+      max-width: 560px;
+      margin-bottom: 22px;
+    }
+
+    .hero-contact {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .hero-contact a {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: white;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 700;
+      transition: color 0.2s;
+    }
+
+    .hero-contact a:hover { color: var(--gold); }
+    .hero-contact .hc-icon { font-size: 16px; }
+
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 15px;
+      padding: 13px 28px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-gold:hover { background: var(--gold2); transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      color: white;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 13px 28px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+
+    .btn-outline:hover { border-color: white; transform: translateY(-1px); }
+
+    /* ── QUICK MESSAGE ── */
+    .qm-card {
+      background: white;
+      border: 2px solid var(--gold);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 22px;
+      box-shadow: 0 2px 14px rgba(240,165,0,0.14);
+    }
+
+    .qm-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .qm-icon-wrap {
+      font-size: 26px;
+      background: #fff8e6;
+      border-radius: 50%;
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .qm-title {
+      font-family: 'Merriweather', serif;
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--navy);
+      margin-bottom: 2px;
+    }
+
+    .qm-hint { font-size: 13px; color: var(--subtle); }
+
+    .qm-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .qm-fields input {
+      padding: 10px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--bg);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .qm-fields input:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(44,95,138,0.12);
+      background: white;
+    }
+
+    .qm-textarea-wrap {
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .qm-textarea-wrap textarea {
+      width: 100%;
+      padding: 10px 13px 28px;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--bg);
+      resize: none;
+      height: 84px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .qm-textarea-wrap textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(44,95,138,0.12);
+      background: white;
+    }
+
+    .char-counter {
+      position: absolute;
+      bottom: 8px;
+      right: 12px;
+      font-size: 12px;
+      color: var(--subtle);
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+
+    .char-counter.near  { color: #e65100; }
+    .char-counter.full  { color: #c62828; font-weight: 700; }
+
+    .qm-btn {
+      width: 100%;
+      background: var(--gold);
+      color: var(--navy);
+      font-family: 'Open Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .qm-btn:hover { background: var(--gold2); transform: translateY(-1px); }
+    .qm-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    /* ── TRUST STRIP ── */
+    .trust-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .trust-card {
+      background: white;
+      border-radius: 10px;
+      padding: 18px 12px;
+      text-align: center;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .trust-card .t-icon { font-size: 26px; display: block; margin-bottom: 8px; }
+
+    .trust-card .t-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      line-height: 1.3;
+    }
+
+    /* ── SERVICE CARDS (HOME) ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--blue);
+      margin-bottom: 14px;
+    }
+
+    .svc-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .svc-preview-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 18px;
+    }
+
+    .svc-preview-card .sp-icon { font-size: 28px; display: block; margin-bottom: 8px; }
+    .svc-preview-card strong { font-size: 14px; color: var(--navy); display: block; margin-bottom: 4px; }
+    .svc-preview-card p { font-size: 13px; color: var(--subtle); line-height: 1.5; }
+
+    /* ── PAGE HEADER ── */
+    .page-h { margin-bottom: 28px; }
+
+    .page-h h2 {
+      font-family: 'Merriweather', serif;
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .page-h p { font-size: 15px; color: var(--subtle); line-height: 1.6; }
+
+    /* ── SERVICES FULL ── */
+    .svc-full-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .svc-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 22px 20px;
+      display: flex;
+      gap: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      transition: box-shadow 0.2s;
+    }
+
+    .svc-card:hover { box-shadow: 0 4px 16px rgba(44,95,138,0.12); }
+    .svc-card .sc-icon { font-size: 32px; flex-shrink: 0; margin-top: 2px; }
+    .svc-card h3 { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .svc-card p { font-size: 13px; color: var(--subtle); line-height: 1.55; }
+
+    /* ── RATE BOX ── */
+    .rate-box {
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      border-radius: 12px;
+      padding: 28px 36px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .rate-box h3 {
+      font-family: 'Merriweather', serif;
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .rate-box p { font-size: 14px; color: #b8d4f0; line-height: 1.5; }
+
+    .rate-num {
+      font-family: 'Merriweather', serif;
+      font-size: 54px;
+      font-weight: 900;
+      color: var(--gold);
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    .rate-num sup { font-size: 24px; vertical-align: top; margin-top: 10px; }
+    .rate-num small { font-size: 16px; color: #b8d4f0; font-family: 'Open Sans', sans-serif; font-weight: 400; }
+
+    /* ── FORMS ── */
+    .form-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 36px 40px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .form-card h2 {
+      font-family: 'Merriweather', serif;
+      font-size: 23px;
+      font-weight: 900;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+
+    .form-sub {
+      font-size: 14.5px;
+      color: var(--subtle);
+      margin-bottom: 30px;
+      line-height: 1.55;
+    }
+
+    .f-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .f-group { display: flex; flex-direction: column; }
+    .f-group.full { grid-column: 1 / -1; }
+
+    .f-group label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .f-group label .req { color: var(--gold); }
+
+    .f-group input,
+    .f-group select,
+    .f-group textarea {
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--bg);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .f-group input:focus,
+    .f-group select:focus,
+    .f-group textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(44,95,138,0.12);
+      background: white;
+    }
+
+    .f-group textarea { resize: vertical; min-height: 110px; }
+
+    .btn-submit {
+      margin-top: 20px;
+      width: 100%;
+      background: var(--gold);
+      color: var(--navy);
+      font-family: 'Open Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 15px 40px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-submit:hover { background: var(--gold2); transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .form-note {
+      font-size: 12px;
+      color: var(--subtle);
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    /* ── SUCCESS / ERROR ── */
+    .form-success {
+      display: none;
+      background: #e8f5e9;
+      border: 1.5px solid #81c784;
+      border-radius: 10px;
+      padding: 32px 24px;
+      text-align: center;
+      color: #2e7d32;
+    }
+
+    .form-success .s-icon { font-size: 44px; margin-bottom: 12px; display: block; }
+    .form-success h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .form-success p { font-size: 14.5px; color: #388e3c; line-height: 1.5; }
+
+    .form-success .reset-btn {
+      margin-top: 20px;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 7px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .form-success .reset-btn:hover { background: #1b5e20; }
+
+    .form-error {
+      display: none;
+      background: #fdecea;
+      border: 1.5px solid #ef9a9a;
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: #c62828;
+      font-size: 14px;
+      margin-top: 14px;
+      text-align: center;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      color: #b8d4f0;
+      text-align: center;
+      padding: 22px 24px;
+      font-size: 13px;
+      line-height: 2;
+    }
+
+    footer strong { color: var(--gold); }
+    footer a { color: #b8d4f0; text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: white; }
+    footer small { color: #4a6a8a; font-size: 12px; display: block; margin-top: 4px; line-height: 1.5; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 720px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--navy);
+        padding: 10px 0 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      }
+
+      .nav-links.open { display: flex; }
+      .nav-toggle { display: block; }
+      .nav-links a { padding: 10px 24px; border-radius: 0; font-size: 15px; }
+
+      main { padding: 24px 16px; }
+
+      .hero { padding: 32px 22px 28px; }
+      .hero h1 { font-size: 24px; }
+
+      .qm-fields { grid-template-columns: 1fr; }
+      .trust-row { grid-template-columns: 1fr 1fr; }
+      .svc-preview-grid { grid-template-columns: 1fr; }
+      .svc-full-grid { grid-template-columns: 1fr; }
+      .f-grid { grid-template-columns: 1fr; }
+      .f-group.full { grid-column: 1; }
+      .form-card { padding: 24px 18px; }
+      .rate-box { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">⚓ <span>Steadfast</span>&nbsp;Senior Services</div>
+    <button class="nav-toggle" onclick="toggleNav()" aria-label="Toggle menu">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#" onclick="show('home')"     id="nav-home"     class="active">Home</a></li>
+      <li><a href="#" onclick="show('services')" id="nav-services">Our Services</a></li>
+      <li><a href="#" onclick="show('inquire')"  id="nav-inquire">Ask a Question</a></li>
+      <li><a href="#" onclick="show('book')"     id="nav-book">Book a Service</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── CONTENT ── -->
+<main>
+
+  <!-- HOME -->
+  <section class="section active" id="home">
+
+    <div class="hero">
+      <div class="eyebrow">Westwood, MA &amp; Surrounding Communities</div>
+      <h1>Helping Seniors Stay<br>Independent &amp; Connected</h1>
+      <p>Steadfast Senior Services delivers reliable, one-on-one errand and companion support within 40 miles of Westwood — so your loved ones can thrive at home with the peace of mind your family deserves.</p>
+      <div class="hero-contact">
+        <a href="tel:7819294623"><span class="hc-icon">📞</span>(781) 929-4623</a>
+        <a href="mailto:steadfastseniorservices@gmail.com"><span class="hc-icon">✉</span>steadfastseniorservices@gmail.com</a>
+      </div>
+      <div class="hero-ctas">
+        <button class="btn-gold"    onclick="show('book')">Book a Service</button>
+        <button class="btn-outline" onclick="show('inquire')">Ask a Question</button>
+      </div>
+    </div>
+
+    <!-- QUICK MESSAGE -->
+    <div class="qm-card">
+      <div class="qm-header">
+        <div class="qm-icon-wrap">💬</div>
+        <div>
+          <div class="qm-title">Send a Quick Message</div>
+          <div class="qm-hint">We reply by phone or text — usually within the hour. Use the live chat bubble (bottom-right) for instant back-and-forth.</div>
+        </div>
+      </div>
+      <form id="quickForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <input type="hidden" name="_subject" value="Quick Message – Steadfast Senior Services"/>
+        <!-- SMS notification: Formspree will CC this address, which your carrier converts to a text.
+             Uncomment the line that matches your phone carrier:
+             Verizon:    <input type="hidden" name="_cc" value="7819294623@vtext.com"/>
+             AT&T:       <input type="hidden" name="_cc" value="7819294623@txt.att.net"/>
+             T-Mobile:   <input type="hidden" name="_cc" value="7819294623@tmomail.net"/>
+             US Cellular:<input type="hidden" name="_cc" value="7819294623@email.uscc.net"/>  -->
+        <input type="hidden" name="_cc" value="7819294623@vtext.com"/>
+        <div class="qm-fields">
+          <input type="text"  name="name"    placeholder="Your name"            required/>
+          <input type="text"  name="contact" placeholder="Your phone or email"  required/>
+        </div>
+        <div class="qm-textarea-wrap">
+          <textarea id="quickText" name="message" maxlength="250"
+            placeholder="Type your message here… (250 characters max)" required></textarea>
+          <span class="char-counter" id="charCounter">0/250</span>
+        </div>
+        <button type="submit" class="qm-btn" id="quickBtn">Send Message →</button>
+        <div class="form-error" id="quickError">Something went wrong. Please try again or call us directly.</div>
+      </form>
+      <div class="form-success" id="quickSuccess">
+        <span class="s-icon">✅</span>
+        <h3>Message Sent!</h3>
+        <p>We'll get back to you shortly by phone or text.</p>
+        <button class="reset-btn" onclick="resetForm('quickForm','quickSuccess')">Send Another</button>
+      </div>
+    </div>
+
+    <div class="trust-row">
+      <div class="trust-card">
+        <span class="t-icon">🔒</span>
+        <div class="t-label">CORI Background Checked</div>
+      </div>
+      <div class="trust-card">
+        <span class="t-icon">🛡️</span>
+        <div class="t-label">Fully Insured</div>
+      </div>
+      <div class="trust-card">
+        <span class="t-icon">📍</span>
+        <div class="t-label">40-Mile Radius of Westwood</div>
+      </div>
+      <div class="trust-card">
+        <span class="t-icon">📅</span>
+        <div class="t-label">7-Day Availability</div>
+      </div>
+    </div>
+
+    <div class="section-label">What We Offer</div>
+    <div class="svc-preview-grid">
+      <div class="svc-preview-card">
+        <span class="sp-icon">🛒</span>
+        <strong>Grocery Shopping &amp; Delivery</strong>
+        <p>Weekly runs and fresh delivery right to the door.</p>
+      </div>
+      <div class="svc-preview-card">
+        <span class="sp-icon">🚑</span>
+        <strong>Medical Transport</strong>
+        <p>Door-to-door rides with wait and escort assistance.</p>
+      </div>
+      <div class="svc-preview-card">
+        <span class="sp-icon">💊</span>
+        <strong>Prescription Pickups</strong>
+        <p>Pharmacy runs so medications are never missed.</p>
+      </div>
+      <div class="svc-preview-card">
+        <span class="sp-icon">👥</span>
+        <strong>Companionship Visits</strong>
+        <p>Friendly check-ins, conversation, and social engagement.</p>
+      </div>
+      <div class="svc-preview-card">
+        <span class="sp-icon">📦</span>
+        <strong>Errands &amp; Household Tasks</strong>
+        <p>Post office, dry cleaning, banking, light organizing.</p>
+      </div>
+      <div class="svc-preview-card">
+        <span class="sp-icon">📞</span>
+        <strong>Wellness Check-In Calls</strong>
+        <p>Scheduled calls for family peace of mind.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section" id="services">
+    <div class="page-h">
+      <div class="eyebrow">What We Offer</div>
+      <h2>Our Services</h2>
+      <p>Every visit is delivered personally — same trusted provider, every time. Serving within 40 miles of Westwood, MA. Starting at <strong>$38/hour</strong> with a free 30-minute consultation.</p>
+    </div>
+
+    <div class="svc-full-grid">
+      <div class="svc-card">
+        <div class="sc-icon">🛒</div>
+        <div>
+          <h3>Grocery Shopping &amp; Delivery</h3>
+          <p>We handle the weekly list, navigate the store, and deliver fresh groceries to your door — organized and put away if needed.</p>
+        </div>
+      </div>
+      <div class="svc-card">
+        <div class="sc-icon">🚑</div>
+        <div>
+          <h3>Medical Appointment Transport</h3>
+          <p>Door-to-door rides to doctor visits, labs, and specialist appointments — with wait time and escort assistance so no one goes alone.</p>
+        </div>
+      </div>
+      <div class="svc-card">
+        <div class="sc-icon">💊</div>
+        <div>
+          <h3>Prescription Pickups</h3>
+          <p>Timely pharmacy runs ensure medications are never missed or delayed. We handle pickup and safe delivery every time.</p>
+        </div>
+      </div>
+      <div class="svc-card">
+        <div class="sc-icon">👥</div>
+        <div>
+          <h3>Companionship Visits</h3>
+          <p>Scheduled in-person visits for conversation, games, walks, or simply sharing company. No senior should feel isolated.</p>
+        </div>
+      </div>
+      <div class="svc-card">
+        <div class="sc-icon">📦</div>
+        <div>
+          <h3>Errands &amp; Household Tasks</h3>
+          <p>Post office runs, dry cleaning, banking, light organizing, and other day-to-day tasks handled with care and reliability.</p>
+        </div>
+      </div>
+      <div class="svc-card">
+        <div class="sc-icon">📞</div>
+        <div>
+          <h3>Wellness Check-In Calls</h3>
+          <p>Scheduled calls to check on your loved one — providing daily touchpoints and real peace of mind for out-of-town family.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="rate-box">
+      <div>
+        <h3>Simple, Transparent Pricing</h3>
+        <p>No hidden fees. No contracts.<br>Free 30-minute consultation to discuss your family's needs.</p>
+      </div>
+      <div class="rate-num"><sup>$</sup>38<small>/hr</small></div>
+    </div>
+  </section>
+
+  <!-- INQUIRE -->
+  <section class="section" id="inquire">
+    <div class="form-card">
+      <h2>Ask Us a Question</h2>
+      <p class="form-sub">Have questions about our services, coverage area, or how we can help? Fill out the form below and we'll get back to you the same day. Or call/text us directly at <strong>(781) 929-4623</strong>.</p>
+
+      <form id="inquiryForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <input type="hidden" name="_subject" value="New Inquiry – Steadfast Senior Services"/>
+        <input type="hidden" name="_cc"      value="7819294623@vtext.com"/>
+        <div class="f-grid">
+          <div class="f-group">
+            <label>Your Name <span class="req">*</span></label>
+            <input type="text" name="name" placeholder="Jane Smith" required/>
+          </div>
+          <div class="f-group">
+            <label>Phone Number</label>
+            <input type="tel" name="phone" placeholder="(555) 000-0000"/>
+          </div>
+          <div class="f-group full">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" name="email" placeholder="you@email.com" required/>
+          </div>
+          <div class="f-group full">
+            <label>Your Question or Message <span class="req">*</span></label>
+            <textarea name="message" placeholder="Tell us what you'd like to know — we're happy to help!" required></textarea>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit" id="inquiryBtn">Send My Question →</button>
+        <div class="form-note">We respond within a few hours — usually the same day.</div>
+        <div class="form-error" id="inquiryError">Something went wrong. Please try again or call us directly.</div>
+      </form>
+
+      <div class="form-success" id="inquirySuccess">
+        <span class="s-icon">✅</span>
+        <h3>Message Received!</h3>
+        <p>Thanks for reaching out. We'll respond to your question within a few hours — usually the same day.</p>
+        <button class="reset-btn" onclick="resetForm('inquiryForm','inquirySuccess')">Send Another Message</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOK -->
+  <section class="section" id="book">
+    <div class="form-card">
+      <h2>Request a Service</h2>
+      <p class="form-sub">Ready to get started? Fill out the form below and we'll confirm your appointment within 24 hours. The first visit includes a free 30-minute consultation. Questions? Call or text <strong>(781) 929-4623</strong>.</p>
+
+      <form id="bookingForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <input type="hidden" name="_subject" value="New Service Request – Steadfast Senior Services"/>
+        <input type="hidden" name="_cc"      value="7819294623@vtext.com"/>
+        <div class="f-grid">
+          <div class="f-group">
+            <label>Your Name <span class="req">*</span></label>
+            <input type="text" name="name" placeholder="Jane Smith" required/>
+          </div>
+          <div class="f-group">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" name="phone" placeholder="(555) 000-0000" required/>
+          </div>
+          <div class="f-group full">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" name="email" placeholder="you@email.com" required/>
+          </div>
+          <div class="f-group">
+            <label>Service Needed <span class="req">*</span></label>
+            <select name="service" required>
+              <option value="" disabled selected>Select a service…</option>
+              <option>Grocery Shopping &amp; Delivery</option>
+              <option>Medical Appointment Transport</option>
+              <option>Prescription Pickup</option>
+              <option>Companionship Visit</option>
+              <option>Errands &amp; Household Tasks</option>
+              <option>Wellness Check-In Call</option>
+              <option>Multiple Services / Not Sure Yet</option>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>How Often?</label>
+            <select name="frequency">
+              <option value="" disabled selected>Select frequency…</option>
+              <option>One-time visit</option>
+              <option>Weekly</option>
+              <option>Bi-weekly</option>
+              <option>As needed</option>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>Preferred Date</label>
+            <input type="date" name="preferred_date"/>
+          </div>
+          <div class="f-group">
+            <label>Preferred Time</label>
+            <select name="preferred_time">
+              <option value="" disabled selected>Select time…</option>
+              <option>Morning (8am – 12pm)</option>
+              <option>Afternoon (12pm – 4pm)</option>
+              <option>Evening (4pm – 7pm)</option>
+              <option>Flexible</option>
+            </select>
+          </div>
+          <div class="f-group full">
+            <label>Service Address <span class="req">*</span></label>
+            <input type="text" name="address" placeholder="123 Main St, Westwood, MA 02090" required/>
+          </div>
+          <div class="f-group full">
+            <label>Additional Notes</label>
+            <textarea name="notes" placeholder="Any special needs, access instructions, or details that will help us prepare…"></textarea>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit" id="bookingBtn">Submit Service Request →</button>
+        <div class="form-note">We'll confirm your appointment within 24 hours.</div>
+        <div class="form-error" id="bookingError">Something went wrong. Please try again or call us directly.</div>
+      </form>
+
+      <div class="form-success" id="bookingSuccess">
+        <span class="s-icon">🎉</span>
+        <h3>Request Submitted!</h3>
+        <p>We've received your service request and will confirm your appointment within 24 hours. We look forward to helping!</p>
+        <button class="reset-btn" onclick="resetForm('bookingForm','bookingSuccess')">Submit Another Request</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <strong>Steadfast Senior Services</strong>
+  <br>
+  <a href="tel:7819294623">📞 (781) 929-4623</a>
+  &nbsp;|&nbsp;
+  <a href="mailto:steadfastseniorservices@gmail.com">✉ steadfastseniorservices@gmail.com</a>
+  <br>
+  Serving within 40 miles of Westwood, MA &nbsp;|&nbsp; Insured · Background Checked · Locally Owned
+  <small>© 2026 Steadfast Senior Services. All rights reserved.</small>
+</footer>
+
+<script>
+  // ── Navigation ───────────────────────────────────────────────────
+  function show(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.getElementById('nav-' + id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.getElementById('navLinks').classList.remove('open');
+    return false;
+  }
+
+  function toggleNav() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+
+  // ── Quick message character counter ──────────────────────────────
+  const quickText    = document.getElementById('quickText');
+  const charCounter  = document.getElementById('charCounter');
+
+  quickText.addEventListener('input', function () {
+    const len = this.value.length;
+    charCounter.textContent = len + '/250';
+    charCounter.className = 'char-counter' + (len >= 250 ? ' full' : len >= 200 ? ' near' : '');
+  });
+
+  // ── Form submission via Formspree ────────────────────────────────
+  function wireForm(formId, btnId, successId, errorId, label) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const btn   = document.getElementById(btnId);
+      const errEl = document.getElementById(errorId);
+
+      btn.disabled    = true;
+      btn.textContent = 'Sending…';
+      errEl.style.display = 'none';
+
+      try {
+        const res = await fetch(form.action, {
+          method:  'POST',
+          body:    new FormData(form),
+          headers: { Accept: 'application/json' }
+        });
+
+        if (res.ok) {
+          form.style.display = 'none';
+          document.getElementById(successId).style.display = 'block';
+        } else {
+          const data = await res.json().catch(() => ({}));
+          errEl.textContent = (data.errors || []).map(e => e.message).join(', ')
+            || 'Submission failed — please try again or call (781) 929-4623.';
+          errEl.style.display = 'block';
+          btn.disabled    = false;
+          btn.textContent = label;
+        }
+      } catch (_) {
+        errEl.style.display = 'block';
+        btn.disabled    = false;
+        btn.textContent = label;
+      }
+    });
+  }
+
+  function resetForm(formId, successId) {
+    const form = document.getElementById(formId);
+    form.reset();
+    form.style.display = '';
+    document.getElementById(successId).style.display = 'none';
+    const btn = form.querySelector('button[type="submit"]');
+    if (btn) btn.disabled = false;
+    // Reset char counter if this is the quick form
+    if (formId === 'quickForm') {
+      charCounter.textContent = '0/250';
+      charCounter.className = 'char-counter';
+    }
+  }
+
+  wireForm('quickForm',   'quickBtn',   'quickSuccess',   'quickError',   'Send Message →');
+  wireForm('inquiryForm', 'inquiryBtn', 'inquirySuccess', 'inquiryError', 'Send My Question →');
+  wireForm('bookingForm', 'bookingBtn', 'bookingSuccess', 'bookingError', 'Submit Service Request →');
+</script>
+
+<!--
+  ═══════════════════════════════════════════════════════════════
+  LIVE TWO-WAY CHAT — Tawk.to (100% free, no credit card)
+  ═══════════════════════════════════════════════════════════════
+  Setup (5 minutes):
+  1. Go to tawk.to and sign up with steadfastseniorservices@gmail.com
+  2. Create a property named "Steadfast Senior Services"
+  3. Copy your Property ID and Widget/Chat ID from the widget embed code
+  4. Replace YOUR_PROPERTY_ID and YOUR_WIDGET_ID below, then save & redeploy
+
+  Once live:
+  • Visitors see a chat bubble (bottom-right corner of your site)
+  • You receive instant notifications via the Tawk.to mobile app or email
+  • Reply from your phone app → visitor sees your message in real time on the site
+  ═══════════════════════════════════════════════════════════════
+-->
+<script type="text/javascript">
+  var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+  (function () {
+    var s1 = document.createElement('script'), s0 = document.getElementsByTagName('script')[0];
+    s1.async = true;
+    s1.src = 'https://embed.tawk.to/YOUR_PROPERTY_ID/YOUR_WIDGET_ID';
+    s1.charset = 'UTF-8';
+    s1.setAttribute('crossorigin', '*');
+    s0.parentNode.insertBefore(s1, s0);
+  })();
+</script>
+
+</body>
+</html>
