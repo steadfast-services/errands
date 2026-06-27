@@ -1855,6 +1855,20 @@
     return out.toDataURL('image/jpeg', 0.45);
   }
 
+  // ImgBB free image hosting — get your free API key at imgbb.com (Account → API)
+  const IMGBB_KEY = 'YOUR_IMGBB_API_KEY';
+
+  async function uploadToImgBB(dataUrl) {
+    const base64 = dataUrl.split(',')[1];
+    const body   = new FormData();
+    body.append('key',   IMGBB_KEY);
+    body.append('image', base64);
+    const res  = await fetch('https://api.imgbb.com/1/upload', { method: 'POST', body });
+    const json = await res.json();
+    if (!json.success) throw new Error('ImgBB upload failed');
+    return json.data.url;
+  }
+
   async function submitVisit() {
     if (clientPad && clientPad.isEmpty()) {
       alert('Client signature is required before sending.');
@@ -1862,9 +1876,15 @@
     }
 
     goToStep(4);
+    const statusEl = document.querySelector('#sendingOverlay p');
 
-    const providerSig = compressSig('providerCanvas');
-    const clientSig   = compressSig('clientCanvas');
+    statusEl.textContent = 'Uploading signatures (1 of 2)…';
+    const providerSig = await uploadToImgBB(compressSig('providerCanvas'));
+
+    statusEl.textContent = 'Uploading signatures (2 of 2)…';
+    const clientSig = await uploadToImgBB(compressSig('clientCanvas'));
+
+    statusEl.textContent = 'Sending email to family…';
 
     const dateFormatted = new Date(visitData.date + 'T12:00:00')
       .toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
