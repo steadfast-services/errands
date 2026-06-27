@@ -908,6 +908,25 @@
     .provider-header h2 { font-family: 'Merriweather', serif; font-size: 22px; font-weight: 900; margin-bottom: 4px; }
     .provider-header p { font-size: 14px; color: #b8d4f0; }
 
+    .provider-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(240,165,0,0.18);
+      border: 1px solid rgba(240,165,0,0.45);
+      border-radius: 24px;
+      padding: 5px 14px 5px 10px;
+      margin-top: 10px;
+    }
+    .pb-dot {
+      width: 8px; height: 8px;
+      background: #f0a500;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .pb-name { font-size: 13px; font-weight: 700; color: #f0a500; }
+    .pb-role { font-size: 11px; color: #b8d4f0; margin-left: 4px; }
+
     .step-bar { display: flex; align-items: flex-start; margin-bottom: 28px; }
 
     .step-dot {
@@ -1619,6 +1638,11 @@
       <div>
         <h2>Log Completed Visit</h2>
         <p>Fill in visit details, collect both signatures, then send the signed record to the family.</p>
+        <div class="provider-badge">
+          <div class="pb-dot"></div>
+          <span class="pb-name" id="providerBadgeName">—</span>
+          <span class="pb-role" id="providerBadgeRole"></span>
+        </div>
       </div>
     </div>
 
@@ -1898,7 +1922,18 @@
   emailjs.init({ publicKey: 'EMueQQUV7SKYd3Ct6' });
 
   // ── Provider Portal ──────────────────────────────────────────────
-  const PROVIDER_PIN = '1234'; // Change this to your own PIN before going live
+  // To add a subcontractor: add a new entry below, then save and push to GitHub.
+  // To revoke access:  delete their entry and push — they are locked out immediately.
+  // PINs must be unique. Owner PIN should be changed from 1234 before going live.
+  const PROVIDERS = {
+    '1234': { name: 'Rajesh Kafley', role: 'Owner'         },
+    '2001': { name: 'Subcontractor 2', role: 'Subcontractor' },
+    '2002': { name: 'Subcontractor 3', role: 'Subcontractor' },
+    '2003': { name: 'Subcontractor 4', role: 'Subcontractor' },
+    '2004': { name: 'Subcontractor 5', role: 'Subcontractor' },
+    '2005': { name: 'Subcontractor 6', role: 'Subcontractor' },
+  };
+  let currentProvider = null;
   let providerPad = null, clientPad = null, visitData = {};
 
   function openPinModal() {
@@ -1913,8 +1948,12 @@
   }
 
   function checkPin() {
-    const entered = document.getElementById('pinInput').value;
-    if (entered === PROVIDER_PIN) {
+    const entered  = document.getElementById('pinInput').value.trim();
+    const provider = PROVIDERS[entered];
+    if (provider) {
+      currentProvider = provider;
+      document.getElementById('providerBadgeName').textContent = provider.name;
+      document.getElementById('providerBadgeRole').textContent = provider.role;
       closePinModal();
       show('complete');
       document.getElementById('v-date').valueAsDate = new Date();
@@ -1989,9 +2028,11 @@
         email,
         date,
         duration,
-        services: checked.map(c => c.value).join(', '),
+        services:     checked.map(c => c.value).join(', '),
         notes,
-        wave: document.getElementById('v-wave').value.trim()
+        wave:         document.getElementById('v-wave').value.trim(),
+        providerName: currentProvider ? currentProvider.name : 'Unknown',
+        providerRole: currentProvider ? currentProvider.role : ''
       };
     }
 
@@ -2146,7 +2187,11 @@
       <tr><td style="padding:16px 28px;">
         <table cellpadding="0" cellspacing="0" width="100%" style="background:#f7faff;border:1px solid #dde8f5;border-radius:8px;">
           <tr>
-            <td style="padding:12px 16px;font-size:12px;font-weight:700;color:#5a6a7e;text-transform:uppercase;letter-spacing:1px;width:110px;">Date</td>
+            <td style="padding:12px 16px;font-size:12px;font-weight:700;color:#5a6a7e;text-transform:uppercase;letter-spacing:1px;width:110px;">Provider</td>
+            <td style="padding:12px 16px;font-size:14px;color:#2d3748;">${visitData.providerName} <span style="font-size:12px;color:#5a6a7e;">(${visitData.providerRole})</span></td>
+          </tr>
+          <tr style="border-top:1px solid #dde8f5;">
+            <td style="padding:12px 16px;font-size:12px;font-weight:700;color:#5a6a7e;text-transform:uppercase;letter-spacing:1px;">Date</td>
             <td style="padding:12px 16px;font-size:14px;color:#2d3748;">${dateFormatted}</td>
           </tr>
           <tr style="border-top:1px solid #dde8f5;">
@@ -2188,18 +2233,19 @@
         'service_e4god2q',
         'template_grcqjuj',
         {
-          to_email:     visitData.email,
-          subject:      'Visit Completed — ' + visitData.client + ' — ' + dateFormatted,
-          client_name:  visitData.client,
-          visit_date:   dateFormatted,
-          duration:     visitData.duration,
-          services:     visitData.services,
-          family_notes: visitData.notes,
-          provider_sig: providerSig,
-          client_sig:   clientSig,
-          wave_text:    visitData.wave
-                          ? 'Pay invoice: ' + visitData.wave
-                          : 'An invoice will be sent separately via Wave.'
+          to_email:      visitData.email,
+          subject:       'Visit Completed — ' + visitData.client + ' — ' + dateFormatted + ' — Provider: ' + visitData.providerName,
+          client_name:   visitData.client,
+          provider_name: visitData.providerName,
+          visit_date:    dateFormatted,
+          duration:      visitData.duration,
+          services:      visitData.services,
+          family_notes:  visitData.notes,
+          provider_sig:  providerSig,
+          client_sig:    clientSig,
+          wave_text:     visitData.wave
+                           ? 'Pay invoice: ' + visitData.wave
+                           : 'An invoice will be sent separately via Wave.'
         }
       );
       document.getElementById('sendingOverlay').style.display  = 'none';
@@ -2233,6 +2279,11 @@
       document.getElementById(who + 'TypeWrap').style.display = 'none';
       document.getElementById(who + 'Toggle').textContent    = "Can't draw? Type your name instead";
     });
+    // Restore provider badge to the still-logged-in provider
+    if (currentProvider) {
+      document.getElementById('providerBadgeName').textContent = currentProvider.name;
+      document.getElementById('providerBadgeRole').textContent = currentProvider.role;
+    }
     visitData = {};
     goToStep(1);
   }
