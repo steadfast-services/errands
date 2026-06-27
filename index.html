@@ -1842,6 +1842,19 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  function compressSig(canvasId) {
+    const src = document.getElementById(canvasId);
+    const out = document.createElement('canvas');
+    const scale = Math.min(1, 480 / src.width);
+    out.width  = Math.round(src.width  * scale);
+    out.height = Math.round(src.height * scale);
+    const ctx = out.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, out.width, out.height);
+    ctx.drawImage(src, 0, 0, out.width, out.height);
+    return out.toDataURL('image/jpeg', 0.45);
+  }
+
   async function submitVisit() {
     if (clientPad && clientPad.isEmpty()) {
       alert('Client signature is required before sending.');
@@ -1850,8 +1863,8 @@
 
     goToStep(4);
 
-    const providerSig = providerPad.toDataURL('image/png');
-    const clientSig   = clientPad.toDataURL('image/png');
+    const providerSig = compressSig('providerCanvas');
+    const clientSig   = compressSig('clientCanvas');
 
     const dateFormatted = new Date(visitData.date + 'T12:00:00')
       .toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
