@@ -2105,27 +2105,34 @@
     if (!providerSigData) { alert('Provider signature is required.'); return; }
     if (!clientSigData)   { alert('Client signature is required before sending.'); return; }
 
+    // Reset all overlays before entering step 4 so retries start clean
+    document.getElementById('sendingOverlay').style.display    = 'block';
+    document.getElementById('sentOverlay').style.display       = 'none';
+    document.getElementById('sendErrorOverlay').style.display  = 'none';
     goToStep(4);
+
     const statusEl = document.querySelector('#sendingOverlay p');
+    function setStatus(msg) { if (statusEl) statusEl.textContent = msg; }
 
-    statusEl.textContent = 'Uploading signatures (1 of 2)…';
-    const providerSig = await uploadToImgBB(providerSigData.dataUrl);
+    try {
+      setStatus('Uploading signatures (1 of 2)…');
+      const providerSig = await uploadToImgBB(providerSigData.dataUrl);
 
-    statusEl.textContent = 'Uploading signatures (2 of 2)…';
-    const clientSig = await uploadToImgBB(clientSigData.dataUrl);
+      setStatus('Uploading signatures (2 of 2)…');
+      const clientSig = await uploadToImgBB(clientSigData.dataUrl);
 
-    statusEl.textContent = 'Sending email to family…';
+      setStatus('Sending email to family…');
 
-    const dateFormatted = new Date(visitData.date + 'T12:00:00')
-      .toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      const dateFormatted = new Date(visitData.date + 'T12:00:00')
+        .toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
-    const waveRow = visitData.wave
-      ? `<tr><td style="padding:8px 28px 24px;">
-           <a href="${visitData.wave}" style="display:inline-block;background:#f0a500;color:#1a3a5c;font-weight:700;padding:13px 28px;border-radius:8px;text-decoration:none;font-size:15px;">Pay Invoice via Wave →</a>
-         </td></tr>`
-      : `<tr><td style="padding:4px 28px 24px;font-size:13px;color:#5a6a7e;">An invoice will be sent separately via Wave.</td></tr>`;
+      const waveRow = visitData.wave
+        ? `<tr><td style="padding:8px 28px 24px;">
+             <a href="${visitData.wave}" style="display:inline-block;background:#f0a500;color:#1a3a5c;font-weight:700;padding:13px 28px;border-radius:8px;text-decoration:none;font-size:15px;">Pay Invoice via Wave →</a>
+           </td></tr>`
+        : `<tr><td style="padding:4px 28px 24px;font-size:13px;color:#5a6a7e;">An invoice will be sent separately via Wave.</td></tr>`;
 
-    const htmlContent = `
+      const htmlContent = `
 <div style="font-family:Arial,sans-serif;max-width:620px;margin:0 auto;background:#f0f4f8;padding:24px;">
   <div style="background:linear-gradient(135deg,#1a3a5c,#2c5f8a);border-radius:12px 12px 0 0;padding:28px 32px;">
     <div style="font-size:20px;font-weight:900;color:white;font-family:Georgia,serif;margin-bottom:4px;">⚓ Steadfast Senior Services</div>
@@ -2177,7 +2184,6 @@
   </div>
 </div>`;
 
-    try {
       await emailjs.send(
         'service_e4god2q',
         'template_grcqjuj',
@@ -2202,8 +2208,10 @@
     } catch (err) {
       document.getElementById('sendingOverlay').style.display    = 'none';
       document.getElementById('sendErrorOverlay').style.display  = 'block';
-      document.getElementById('sendErrorMsg').textContent =
-        (err && err.text) ? err.text : 'Email failed — check your EmailJS setup in the code.';
+      const msg = (err && err.text) ? err.text
+                : (err && err.message) ? err.message
+                : 'Something went wrong — check your internet connection and try again.';
+      document.getElementById('sendErrorMsg').textContent = msg;
     }
   }
 
@@ -2217,9 +2225,14 @@
     document.getElementById('v-date').valueAsDate = new Date();
     if (providerPad) { providerPad.clear(); document.getElementById('providerPlaceholder').style.opacity = '1'; }
     if (clientPad)   { clientPad.clear();   document.getElementById('clientPlaceholder').style.opacity  = '1'; }
-    document.getElementById('sendingOverlay').style.display   = 'block';
-    document.getElementById('sentOverlay').style.display      = 'none';
-    document.getElementById('sendErrorOverlay').style.display = 'none';
+    // Reset typed-name sig inputs and toggle state
+    ['provider', 'client'].forEach(who => {
+      sigMode[who] = 'draw';
+      document.getElementById(who + 'Typed').value          = '';
+      document.getElementById(who + 'SigWrap').style.display  = '';
+      document.getElementById(who + 'TypeWrap').style.display = 'none';
+      document.getElementById(who + 'Toggle').textContent    = "Can't draw? Type your name instead";
+    });
     visitData = {};
     goToStep(1);
   }
