@@ -111,6 +111,50 @@
       padding: 48px 48px 40px;
       color: white;
       margin-bottom: 22px;
+      display: flex;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .hero-left { flex: 1 1 0; min-width: 0; }
+
+    .hero-right {
+      flex: 0 0 230px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 10px;
+      padding: 22px 24px;
+    }
+
+    .hero-right-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+
+    .hero-services-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .hero-services-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13.5px;
+      color: #d8eaf8;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .hero-services-list li .hs-icon {
+      font-size: 18px;
+      flex-shrink: 0;
     }
 
     .eyebrow {
@@ -134,7 +178,6 @@
       font-size: 15.5px;
       color: #b8d4f0;
       line-height: 1.7;
-      max-width: 560px;
       margin-bottom: 22px;
     }
 
@@ -655,8 +698,9 @@
 
       main { padding: 24px 16px; }
 
-      .hero { padding: 32px 22px 28px; }
+      .hero { padding: 32px 22px 28px; flex-direction: column; }
       .hero h1 { font-size: 24px; }
+      .hero-right { flex: none; width: 100%; }
 
       .home-panels { grid-template-columns: 1fr; }
       .qm-fields { grid-template-columns: 1fr; }
@@ -693,16 +737,29 @@
   <section class="section active" id="home">
 
     <div class="hero">
-      <div class="eyebrow">Westwood, MA &amp; Surrounding Communities</div>
-      <h1>Helping Seniors Stay<br>Independent &amp; Connected</h1>
-      <p>Steadfast Senior Services delivers reliable, one-on-one errand and companion support within 40 miles of Westwood — so your loved ones can thrive at home with the peace of mind your family deserves.</p>
-      <div class="hero-contact">
-        <a href="tel:7819294623"><span class="hc-icon">📞</span>(781) 929-4623</a>
-        <a href="mailto:steadfastseniorservices@gmail.com"><span class="hc-icon">✉</span>steadfastseniorservices@gmail.com</a>
+      <div class="hero-left">
+        <div class="eyebrow">Westwood, MA &amp; Surrounding Communities</div>
+        <h1>Helping Seniors Stay<br>Independent &amp; Connected</h1>
+        <p>Steadfast Senior Services delivers reliable, one-on-one errand and companion support within 40 miles of Westwood — so your loved ones can thrive at home with the peace of mind your family deserves.</p>
+        <div class="hero-contact">
+          <a href="tel:7819294623"><span class="hc-icon">📞</span>(781) 929-4623</a>
+          <a href="mailto:steadfastseniorservices@gmail.com"><span class="hc-icon">✉</span>steadfastseniorservices@gmail.com</a>
+        </div>
+        <div class="hero-ctas">
+          <button class="btn-gold"    onclick="show('book')">Book a Service</button>
+          <button class="btn-outline" onclick="show('inquire')">Ask a Question</button>
+        </div>
       </div>
-      <div class="hero-ctas">
-        <button class="btn-gold"    onclick="show('book')">Book a Service</button>
-        <button class="btn-outline" onclick="show('inquire')">Ask a Question</button>
+      <div class="hero-right">
+        <div class="hero-right-title">What We Offer</div>
+        <ul class="hero-services-list">
+          <li><span class="hs-icon">🛒</span>Grocery Shopping &amp; Delivery</li>
+          <li><span class="hs-icon">🚑</span>Medical Appointment Transport</li>
+          <li><span class="hs-icon">💊</span>Prescription Pickups</li>
+          <li><span class="hs-icon">👥</span>Companionship Visits</li>
+          <li><span class="hs-icon">📦</span>Errands &amp; Household Tasks</li>
+          <li><span class="hs-icon">📞</span>Wellness Check-In Calls</li>
+        </ul>
       </div>
     </div>
 
@@ -828,39 +885,6 @@
       </div>
     </div>
 
-    <div class="section-label">What We Offer</div>
-    <div class="svc-preview-grid">
-      <div class="svc-preview-card">
-        <span class="sp-icon">🛒</span>
-        <strong>Grocery Shopping &amp; Delivery</strong>
-        <p>Weekly runs and fresh delivery right to the door.</p>
-      </div>
-      <div class="svc-preview-card">
-        <span class="sp-icon">🚑</span>
-        <strong>Medical Transport</strong>
-        <p>Door-to-door rides with wait and escort assistance.</p>
-      </div>
-      <div class="svc-preview-card">
-        <span class="sp-icon">💊</span>
-        <strong>Prescription Pickups</strong>
-        <p>Pharmacy runs so medications are never missed.</p>
-      </div>
-      <div class="svc-preview-card">
-        <span class="sp-icon">👥</span>
-        <strong>Companionship Visits</strong>
-        <p>Friendly check-ins, conversation, and social engagement.</p>
-      </div>
-      <div class="svc-preview-card">
-        <span class="sp-icon">📦</span>
-        <strong>Errands &amp; Household Tasks</strong>
-        <p>Post office, dry cleaning, banking, light organizing.</p>
-      </div>
-      <div class="svc-preview-card">
-        <span class="sp-icon">📞</span>
-        <strong>Wellness Check-In Calls</strong>
-        <p>Scheduled calls for family peace of mind.</p>
-      </div>
-    </div>
 
   </section>
 
