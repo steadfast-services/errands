@@ -743,6 +743,100 @@
     footer a { color: #b8d4f0; text-decoration: none; transition: color 0.2s; }
     footer a:hover { color: white; }
     footer small { color: #4a6a8a; font-size: 12px; display: block; margin-top: 4px; line-height: 1.5; }
+    footer .footer-links { margin-top: 8px; }
+    footer .footer-links a { font-size: 12px; color: #4a6a8a; margin: 0 8px; }
+    footer .footer-links a:hover { color: #b8d4f0; }
+
+    /* ── PRIVACY POLICY ── */
+    .privacy-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 40px 44px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .privacy-card h2 {
+      font-family: 'Merriweather', serif;
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+
+    .privacy-card .pp-date { font-size: 13px; color: var(--subtle); margin-bottom: 28px; }
+
+    .privacy-card h3 {
+      font-family: 'Merriweather', serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 24px 0 8px;
+    }
+
+    .privacy-card p, .privacy-card li {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.75;
+    }
+
+    .privacy-card ul { padding-left: 20px; margin-top: 6px; }
+    .privacy-card li { margin-bottom: 4px; }
+
+    .privacy-card .pp-contact {
+      background: #f7faff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-top: 24px;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── SIG FALLBACK ── */
+    .sig-toggle {
+      font-size: 12.5px;
+      color: var(--blue);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      padding: 0;
+      margin-top: 10px;
+      display: block;
+    }
+
+    .sig-type-wrap {
+      display: none;
+      margin-top: 10px;
+    }
+
+    .sig-type-wrap input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Merriweather', serif;
+      font-size: 22px;
+      color: var(--navy);
+      font-style: italic;
+      background: #fafbfd;
+      transition: border-color 0.2s;
+    }
+
+    .sig-type-wrap input:focus {
+      outline: none;
+      border-color: var(--navy);
+      background: white;
+    }
+
+    .sig-type-hint {
+      font-size: 12px;
+      color: var(--subtle);
+      margin-top: 6px;
+    }
 
     /* ── HOME PANELS (booking + quick message side by side) ── */
     .home-panels {
@@ -1065,6 +1159,7 @@
       <li><a href="#" onclick="show('inquire')"  id="nav-inquire">Ask a Question</a></li>
       <li><a href="#" onclick="show('book')"     id="nav-book">Book a Service</a></li>
       <li><a href="#" onclick="openPinModal()"  id="nav-complete" class="nav-provider">🔐 Log Visit</a></li>
+      <li><a href="#" onclick="show('privacy')" id="nav-privacy"  style="display:none;">Privacy</a></li>
     </ul>
   </div>
 </nav>
@@ -1445,6 +1540,77 @@
     </div>
   </section>
 
+  <!-- PRIVACY POLICY -->
+  <section class="section" id="privacy">
+    <div class="privacy-card">
+      <h2>Privacy Policy</h2>
+      <p class="pp-date">Effective June 28, 2026 &nbsp;·&nbsp; Steadfast Senior Services, Westwood, MA</p>
+
+      <h3>What Information We Collect</h3>
+      <p>When you book a service, ask a question, or contact us, we collect:</p>
+      <ul>
+        <li>Name, email address, phone number, and home address</li>
+        <li>Service preferences, scheduling requests, and visit notes</li>
+        <li>Digital signatures (drawn or typed) confirming service completion</li>
+        <li>Any additional details you voluntarily provide about care needs</li>
+      </ul>
+
+      <h3>How We Use Your Information</h3>
+      <p>We use the information you provide solely to:</p>
+      <ul>
+        <li>Schedule and deliver companion and errand services</li>
+        <li>Send visit completion records and invoices to you or your designated family member</li>
+        <li>Communicate about your service requests and appointments</li>
+        <li>Maintain service records for our own internal bookkeeping</li>
+      </ul>
+      <p>We do <strong>not</strong> sell, rent, or share your personal information with any third party for marketing purposes.</p>
+
+      <h3>Third-Party Services We Use</h3>
+      <p>To operate our booking and communication system, your information passes through the following services, each of which maintains its own privacy and security practices:</p>
+      <ul>
+        <li><strong>Formspree</strong> (formspree.io) — receives booking and inquiry form submissions</li>
+        <li><strong>EmailJS</strong> (emailjs.com) — delivers signed visit records to your family by email</li>
+        <li><strong>ImgBB</strong> (imgbb.com) — temporarily hosts digital signature images included in emails</li>
+        <li><strong>Gmail / Google</strong> — our business email provider</li>
+        <li><strong>Wave</strong> (waveapps.com) — invoicing and payment processing</li>
+      </ul>
+
+      <h3>Data Security</h3>
+      <p>Our website is served over HTTPS (encrypted in transit). We maintain a Written Information Security Program (WISP) in compliance with Massachusetts 201 CMR 17.00. Access to your information is limited to the service provider only. We do not store payment card numbers — all card payments are processed by Wave.</p>
+
+      <h3>Data Retention</h3>
+      <p>We retain service records (including signed visit logs and correspondence) for seven (7) years from the date of service, after which they are securely deleted. You may request earlier deletion of your records by contacting us directly.</p>
+
+      <h3>Electronic Signatures</h3>
+      <p>Digital signatures collected through this site (drawn or typed) are legally valid electronic signatures under the Massachusetts Uniform Electronic Transactions Act (MGL Chapter 110G) and the federal Electronic Signatures in Global and National Commerce Act (ESIGN). By signing, you acknowledge consent to the use of electronic signatures for service records.</p>
+
+      <h3>Your Rights</h3>
+      <p>You have the right to:</p>
+      <ul>
+        <li>Request a copy of the personal information we hold about you</li>
+        <li>Request correction of inaccurate information</li>
+        <li>Request deletion of your information (subject to our legal record-keeping obligations)</li>
+        <li>Opt out of any non-essential communications</li>
+      </ul>
+
+      <h3>Massachusetts Residents</h3>
+      <p>We comply with Massachusetts General Law Chapter 93H (Data Breach Notification) and 201 CMR 17.00 (Personal Information Security). In the event of a data breach affecting your personal information, we will notify you and the Massachusetts Attorney General as required by law.</p>
+
+      <h3>Children's Privacy</h3>
+      <p>Our services are intended for adults and senior citizens. We do not knowingly collect information from individuals under the age of 18.</p>
+
+      <h3>Changes to This Policy</h3>
+      <p>We may update this policy periodically. The effective date at the top of this page reflects the most recent revision. Continued use of our services after any update constitutes acceptance of the revised policy.</p>
+
+      <div class="pp-contact">
+        <strong>Questions or Requests</strong><br>
+        Contact us at any time regarding your privacy rights:<br>
+        📞 (781) 929-4623 &nbsp;·&nbsp; ✉ <a href="mailto:steadfastseniorservices@gmail.com">steadfastseniorservices@gmail.com</a><br>
+        Steadfast Senior Services &nbsp;·&nbsp; Westwood, MA
+      </div>
+    </div>
+  </section>
+
   <!-- COMPLETE VISIT (PROVIDER PORTAL) -->
   <section class="section" id="complete">
 
@@ -1526,10 +1692,15 @@
       <div class="visit-form-card">
         <h3>Provider Signature</h3>
         <p class="vfc-sub">Sign below to confirm you completed the listed services.</p>
-        <div class="sig-wrap">
+        <div class="sig-wrap" id="providerSigWrap">
           <canvas id="providerCanvas"></canvas>
           <div class="sig-placeholder" id="providerPlaceholder">Sign here with your finger or stylus</div>
         </div>
+        <div class="sig-type-wrap" id="providerTypeWrap">
+          <input type="text" id="providerTyped" placeholder="Type your full name" aria-label="Type your full name as signature"/>
+          <div class="sig-type-hint">Typing your name is legally valid as an electronic signature under Massachusetts law.</div>
+        </div>
+        <button class="sig-toggle" id="providerToggle" onclick="toggleSigMode('provider')">Can't draw? Type your name instead</button>
         <div class="sig-actions">
           <button class="btn-clear" onclick="clearSig('provider')">Clear</button>
           <div style="display:flex;gap:10px;">
@@ -1552,10 +1723,15 @@
       <div class="visit-form-card">
         <h3>Client Signature</h3>
         <p class="vfc-sub">By signing, the client confirms the services described were completed to their satisfaction.</p>
-        <div class="sig-wrap">
+        <div class="sig-wrap" id="clientSigWrap">
           <canvas id="clientCanvas"></canvas>
           <div class="sig-placeholder" id="clientPlaceholder">Client signs here</div>
         </div>
+        <div class="sig-type-wrap" id="clientTypeWrap">
+          <input type="text" id="clientTyped" placeholder="Client types full name" aria-label="Client types full name as signature"/>
+          <div class="sig-type-hint">Typing your name is legally valid as an electronic signature under Massachusetts law.</div>
+        </div>
+        <button class="sig-toggle" id="clientToggle" onclick="toggleSigMode('client')">Can't draw? Type your name instead</button>
         <div class="sig-actions">
           <button class="btn-clear" onclick="clearSig('client')">Clear</button>
           <div style="display:flex;gap:10px;">
@@ -1618,6 +1794,9 @@
   <br>
   Serving within 40 miles of Westwood, MA &nbsp;|&nbsp; Insured · Background Checked · Locally Owned
   <small>© 2026 Steadfast Senior Services. All rights reserved.</small>
+  <div class="footer-links">
+    <a href="#" onclick="show('privacy')">Privacy Policy</a>
+  </div>
 </footer>
 
 <script>
@@ -1817,9 +1996,14 @@
     }
 
     // Validate provider signature before leaving step 2
-    if (n > 2 && providerPad && providerPad.isEmpty()) {
-      alert('Please add your signature before continuing.');
-      return;
+    if (n > 2) {
+      const provOk = sigMode.provider === 'type'
+        ? document.getElementById('providerTyped').value.trim() !== ''
+        : providerPad && !providerPad.isEmpty();
+      if (!provOk) {
+        alert('Please add your signature before continuing.');
+        return;
+      }
     }
 
     // Update step visibility
@@ -1840,6 +2024,40 @@
     });
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Track which mode each sig pad is in
+  const sigMode = { provider: 'draw', client: 'draw' };
+
+  function toggleSigMode(who) {
+    const mode    = sigMode[who] === 'draw' ? 'type' : 'draw';
+    sigMode[who]  = mode;
+    const sigWrap  = document.getElementById(who + 'SigWrap');
+    const typeWrap = document.getElementById(who + 'TypeWrap');
+    const toggle   = document.getElementById(who + 'Toggle');
+    if (mode === 'type') {
+      sigWrap.style.display  = 'none';
+      typeWrap.style.display = 'block';
+      toggle.textContent = 'Switch back to drawing';
+    } else {
+      sigWrap.style.display  = '';
+      typeWrap.style.display = 'none';
+      toggle.textContent = 'Can\'t draw? Type your name instead';
+    }
+  }
+
+  function renderTypedSig(name) {
+    const canvas = document.createElement('canvas');
+    canvas.width  = 480;
+    canvas.height = 120;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = 'italic 42px Merriweather, Georgia, serif';
+    ctx.fillStyle = '#1a3a5c';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(name, 20, 60);
+    return canvas.toDataURL('image/jpeg', 0.7);
   }
 
   function compressSig(canvasId) {
@@ -1869,20 +2087,32 @@
     return json.data.url;
   }
 
-  async function submitVisit() {
-    if (clientPad && clientPad.isEmpty()) {
-      alert('Client signature is required before sending.');
-      return;
+  function getSigData(who) {
+    if (sigMode[who] === 'type') {
+      const name = document.getElementById(who + 'Typed').value.trim();
+      if (!name) return null;
+      return { type: 'typed', dataUrl: renderTypedSig(name), label: 'Typed: ' + name };
     }
+    const pad = who === 'provider' ? providerPad : clientPad;
+    if (!pad || pad.isEmpty()) return null;
+    return { type: 'drawn', dataUrl: compressSig(who + 'Canvas'), label: 'Drawn signature' };
+  }
+
+  async function submitVisit() {
+    const providerSigData = getSigData('provider');
+    const clientSigData   = getSigData('client');
+
+    if (!providerSigData) { alert('Provider signature is required.'); return; }
+    if (!clientSigData)   { alert('Client signature is required before sending.'); return; }
 
     goToStep(4);
     const statusEl = document.querySelector('#sendingOverlay p');
 
     statusEl.textContent = 'Uploading signatures (1 of 2)…';
-    const providerSig = await uploadToImgBB(compressSig('providerCanvas'));
+    const providerSig = await uploadToImgBB(providerSigData.dataUrl);
 
     statusEl.textContent = 'Uploading signatures (2 of 2)…';
-    const clientSig = await uploadToImgBB(compressSig('clientCanvas'));
+    const clientSig = await uploadToImgBB(clientSigData.dataUrl);
 
     statusEl.textContent = 'Sending email to family…';
 
