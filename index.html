@@ -352,33 +352,27 @@
     .qm-btn:hover { background: var(--gold2); transform: translateY(-1px); }
     .qm-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-    /* ── TRUST STRIP ── */
-    .trust-row {
+    /* ── TRUST BADGES (inside quick message card) ── */
+    .trust-badges {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 22px;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
     }
 
-    .trust-card {
-      background: white;
-      border-radius: 10px;
-      padding: 18px 12px;
-      text-align: center;
-      border: 1px solid var(--border);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-    }
-
-    .trust-card .t-icon { font-size: 26px; display: block; margin-bottom: 8px; }
-
-    .trust-card .t-label {
+    .trust-badge {
+      display: flex;
+      align-items: center;
+      gap: 7px;
       font-size: 12px;
       font-weight: 700;
       color: var(--navy);
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
       line-height: 1.3;
     }
+
+    .trust-badge .tb-icon { font-size: 15px; flex-shrink: 0; }
 
     /* ── SERVICE CARDS (HOME) ── */
     .section-label {
@@ -862,27 +856,14 @@
           <p>We'll get back to you shortly by phone or text.</p>
           <button class="reset-btn" onclick="resetForm('quickForm','quickSuccess')">Send Another</button>
         </div>
+        <div class="trust-badges">
+          <div class="trust-badge"><span class="tb-icon">🔒</span>CORI Background Checked</div>
+          <div class="trust-badge"><span class="tb-icon">🛡️</span>Fully Insured</div>
+          <div class="trust-badge"><span class="tb-icon">📍</span>40-Mile Radius</div>
+          <div class="trust-badge"><span class="tb-icon">📅</span>7-Day Availability</div>
+        </div>
       </div>
 
-    </div>
-
-    <div class="trust-row">
-      <div class="trust-card">
-        <span class="t-icon">🔒</span>
-        <div class="t-label">CORI Background Checked</div>
-      </div>
-      <div class="trust-card">
-        <span class="t-icon">🛡️</span>
-        <div class="t-label">Fully Insured</div>
-      </div>
-      <div class="trust-card">
-        <span class="t-icon">📍</span>
-        <div class="t-label">40-Mile Radius of Westwood</div>
-      </div>
-      <div class="trust-card">
-        <span class="t-icon">📅</span>
-        <div class="t-label">7-Day Availability</div>
-      </div>
     </div>
 
 
