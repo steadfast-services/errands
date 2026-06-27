@@ -6,7 +6,6 @@
   <title>Steadfast Senior Services – Inquiries & Bookings</title>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
     :root {
       --navy:   #1a3a5c;
@@ -1908,31 +1907,11 @@
   wireForm('inquiryForm',     'inquiryBtn',     'inquirySuccess',     'inquiryError',     'Send My Question →');
   wireForm('bookingForm',     'bookingBtn',     'bookingSuccess',     'bookingError',     'Submit Service Request →');
 
-  // ── EmailJS init ─────────────────────────────────────────────────
-  // SETUP (one time):
-  // 1. Go to emailjs.com and sign up (free — 200 emails/month)
-  // 2. Add a Gmail service and note the Service ID
-  // 3. Create a template with:
-  //      To:      {{to_email}}
-  //      Subject: {{subject}}
-  //      Body:    (HTML mode, paste exactly) {{{html_content}}}
-  //    Note the Template ID
-  // 4. Copy your Public Key from Account → API Keys
-  // 5. Replace the three placeholders below and redeploy
-  emailjs.init({ publicKey: 'EMueQQUV7SKYd3Ct6' });
-
   // ── Provider Portal ──────────────────────────────────────────────
-  // To add a subcontractor: add a new entry below, then save and push to GitHub.
-  // To revoke access:  delete their entry and push — they are locked out immediately.
-  // PINs must be unique. Owner PIN should be changed from 1234 before going live.
-  const PROVIDERS = {
-    '1234': { name: 'Ravi Kafley', role: 'Owner'         },
-    '2001': { name: 'Subcontractor 2', role: 'Subcontractor' },
-    '2002': { name: 'Subcontractor 3', role: 'Subcontractor' },
-    '2003': { name: 'Subcontractor 4', role: 'Subcontractor' },
-    '2004': { name: 'Subcontractor 5', role: 'Subcontractor' },
-    '2005': { name: 'Subcontractor 6', role: 'Subcontractor' },
-  };
+  // All secrets (PINs, API keys, EmailJS credentials) live in the Cloudflare Worker.
+  // Nothing sensitive is in this file. Update WORKER_URL after deploying the Worker.
+  const WORKER_URL = 'https://steadfast-auth.YOUR-SUBDOMAIN.workers.dev';
+
   let currentProvider = null;
   let providerPad = null, clientPad = null, visitData = {};
 
@@ -1947,21 +1926,38 @@
     document.getElementById('pinModal').classList.remove('open');
   }
 
-  function checkPin() {
-    const entered  = document.getElementById('pinInput').value.trim();
-    const provider = PROVIDERS[entered];
-    if (provider) {
-      currentProvider = provider;
-      document.getElementById('providerBadgeName').textContent = provider.name;
-      document.getElementById('providerBadgeRole').textContent = provider.role;
-      closePinModal();
-      show('complete');
-      document.getElementById('v-date').valueAsDate = new Date();
-      initPads();
-    } else {
-      document.getElementById('pinError').textContent = 'Incorrect PIN — try again.';
-      document.getElementById('pinInput').value = '';
-      document.getElementById('pinInput').focus();
+  async function checkPin() {
+    const entered = document.getElementById('pinInput').value.trim();
+    const errEl   = document.getElementById('pinError');
+    const btn     = document.querySelector('.pin-btns .btn-next');
+    errEl.textContent = '';
+    if (btn) { btn.disabled = true; btn.textContent = 'Checking…'; }
+
+    try {
+      const res  = await fetch(WORKER_URL + '/auth', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ pin: entered }),
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        currentProvider = { name: data.name, role: data.role };
+        document.getElementById('providerBadgeName').textContent = data.name;
+        document.getElementById('providerBadgeRole').textContent = data.role;
+        closePinModal();
+        show('complete');
+        document.getElementById('v-date').valueAsDate = new Date();
+        initPads();
+      } else {
+        errEl.textContent = 'Incorrect PIN — try again.';
+        document.getElementById('pinInput').value = '';
+        document.getElementById('pinInput').focus();
+      }
+    } catch (_) {
+      errEl.textContent = 'Connection error — check your internet and try again.';
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = 'Enter →'; }
     }
   }
 
@@ -2114,19 +2110,6 @@
     return out.toDataURL('image/jpeg', 0.45);
   }
 
-  // ImgBB free image hosting — get your free API key at imgbb.com (Account → API)
-  const IMGBB_KEY = 'c0227b275838aa89868861d64a6a5c62';
-
-  async function uploadToImgBB(dataUrl) {
-    const base64 = dataUrl.split(',')[1];
-    const body   = new FormData();
-    body.append('key',   IMGBB_KEY);
-    body.append('image', base64);
-    const res  = await fetch('https://api.imgbb.com/1/upload', { method: 'POST', body });
-    const json = await res.json();
-    if (!json.success) throw new Error('ImgBB upload failed');
-    return json.data.url;
-  }
 
   function getSigData(who) {
     if (sigMode[who] === 'type') {
@@ -2156,108 +2139,38 @@
     function setStatus(msg) { if (statusEl) statusEl.textContent = msg; }
 
     try {
-      setStatus('Uploading signatures (1 of 2)…');
-      const providerSig = await uploadToImgBB(providerSigData.dataUrl);
-
-      setStatus('Uploading signatures (2 of 2)…');
-      const clientSig = await uploadToImgBB(clientSigData.dataUrl);
-
-      setStatus('Sending email to family…');
+      setStatus('Sending visit record to family…');
 
       const dateFormatted = new Date(visitData.date + 'T12:00:00')
         .toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
-      const waveRow = visitData.wave
-        ? `<tr><td style="padding:8px 28px 24px;">
-             <a href="${visitData.wave}" style="display:inline-block;background:#f0a500;color:#1a3a5c;font-weight:700;padding:13px 28px;border-radius:8px;text-decoration:none;font-size:15px;">Pay Invoice via Wave →</a>
-           </td></tr>`
-        : `<tr><td style="padding:4px 28px 24px;font-size:13px;color:#5a6a7e;">An invoice will be sent separately via Wave.</td></tr>`;
+      const res  = await fetch(WORKER_URL + '/send-visit', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          visitData: {
+            ...visitData,
+            dateFormatted,
+            subject: 'Visit Completed — ' + visitData.client + ' — ' + dateFormatted + ' — Provider: ' + visitData.providerName,
+          },
+          providerSigDataUrl: providerSigData.dataUrl,
+          clientSigDataUrl:   clientSigData.dataUrl,
+        }),
+      });
+      const data = await res.json();
 
-      const htmlContent = `
-<div style="font-family:Arial,sans-serif;max-width:620px;margin:0 auto;background:#f0f4f8;padding:24px;">
-  <div style="background:linear-gradient(135deg,#1a3a5c,#2c5f8a);border-radius:12px 12px 0 0;padding:28px 32px;">
-    <div style="font-size:20px;font-weight:900;color:white;font-family:Georgia,serif;margin-bottom:4px;">⚓ Steadfast Senior Services</div>
-    <div style="font-size:13px;color:#b8d4f0;">Signed Visit Completion Record</div>
-  </div>
-  <div style="background:white;border-radius:0 0 12px 12px;">
-    <table width="100%" cellpadding="0" cellspacing="0">
-      <tr><td style="padding:28px 28px 8px;">
-        <h2 style="margin:0;font-family:Georgia,serif;color:#1a3a5c;font-size:20px;">Visit Completed — ${visitData.client}</h2>
-      </td></tr>
-      <tr><td style="padding:16px 28px;">
-        <table cellpadding="0" cellspacing="0" width="100%" style="background:#f7faff;border:1px solid #dde8f5;border-radius:8px;">
-          <tr>
-            <td style="padding:12px 16px;font-size:12px;font-weight:700;color:#5a6a7e;text-transform:uppercase;letter-spacing:1px;width:110px;">Provider</td>
-            <td style="padding:12px 16px;font-size:14px;color:#2d3748;">${visitData.providerName} <span style="font-size:12px;color:#5a6a7e;">(${visitData.providerRole})</span></td>
-          </tr>
-          <tr style="border-top:1px solid #dde8f5;">
-            <td style="padding:12px 16px;font-size:12px;font-weight:700;color:#5a6a7e;text-transform:uppercase;letter-spacing:1px;">Date</td>
-            <td style="padding:12px 16px;font-size:14px;color:#2d3748;">${dateFormatted}</td>
-          </tr>
-          <tr style="border-top:1px solid #dde8f5;">
-            <td style="padding:12px 16px;font-size:12px;font-weight:700;color:#5a6a7e;text-transform:uppercase;letter-spacing:1px;">Duration</td>
-            <td style="padding:12px 16px;font-size:14px;color:#2d3748;">${visitData.duration}</td>
-          </tr>
-          <tr style="border-top:1px solid #dde8f5;">
-            <td style="padding:12px 16px;font-size:12px;font-weight:700;color:#5a6a7e;text-transform:uppercase;letter-spacing:1px;">Services</td>
-            <td style="padding:12px 16px;font-size:14px;color:#2d3748;">${visitData.services}</td>
-          </tr>
-        </table>
-      </td></tr>
-      <tr><td style="padding:8px 28px 20px;">
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2c5f8a;margin-bottom:10px;">Provider Notes for Family</div>
-        <div style="background:#f7faff;border-left:3px solid #2c5f8a;padding:14px 18px;border-radius:0 8px 8px 0;font-size:14px;color:#2d3748;line-height:1.7;">${visitData.notes.replace(/\n/g, '<br>')}</div>
-      </td></tr>
-      <tr><td style="padding:0 28px 20px;">
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2c5f8a;margin-bottom:10px;">Provider Signature</div>
-        <img src="${providerSig}" style="max-width:300px;border:1px solid #dde8f5;border-radius:6px;display:block;background:#fafbfd;"/>
-      </td></tr>
-      <tr><td style="padding:0 28px 8px;">
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2c5f8a;margin-bottom:10px;">Client Confirmation Signature</div>
-        <img src="${clientSig}" style="max-width:300px;border:1px solid #dde8f5;border-radius:6px;display:block;background:#fafbfd;"/>
-        <div style="font-size:12px;color:#5a6a7e;margin-top:8px;">Client confirmed services were received and completed to their satisfaction.</div>
-      </td></tr>
-      ${waveRow}
-      <tr><td style="padding:20px 28px;background:#f7faff;border-top:1px solid #dde8f5;border-radius:0 0 12px 12px;">
-        <div style="font-size:13px;font-weight:700;color:#1a3a5c;margin-bottom:4px;">Steadfast Senior Services</div>
-        <div style="font-size:12px;color:#5a6a7e;line-height:1.8;">
-          📞 (781) 929-4623 &nbsp;|&nbsp; ✉ steadfastseniorservices@gmail.com<br>
-          Serving within 40 miles of Westwood, MA &nbsp;·&nbsp; CORI Checked &nbsp;·&nbsp; Fully Insured
-        </div>
-      </td></tr>
-    </table>
-  </div>
-</div>`;
-
-      await emailjs.send(
-        'service_e4god2q',
-        'template_grcqjuj',
-        {
-          to_email:      visitData.email,
-          subject:       'Visit Completed — ' + visitData.client + ' — ' + dateFormatted + ' — Provider: ' + visitData.providerName,
-          client_name:   visitData.client,
-          provider_name: visitData.providerName,
-          visit_date:    dateFormatted,
-          duration:      visitData.duration,
-          services:      visitData.services,
-          family_notes:  visitData.notes,
-          provider_sig:  providerSig,
-          client_sig:    clientSig,
-          wave_text:     visitData.wave
-                           ? 'Pay invoice: ' + visitData.wave
-                           : 'An invoice will be sent separately via Wave.'
-        }
-      );
-      document.getElementById('sendingOverlay').style.display  = 'none';
-      document.getElementById('sentOverlay').style.display     = 'block';
-      document.getElementById('sentMsg').textContent = 'Signed visit record emailed to ' + visitData.email;
+      if (data.ok) {
+        document.getElementById('sendingOverlay').style.display  = 'none';
+        document.getElementById('sentOverlay').style.display     = 'block';
+        document.getElementById('sentMsg').textContent = 'Signed visit record emailed to ' + visitData.email;
+      } else {
+        throw new Error(data.error || 'Worker returned an error — please try again.');
+      }
     } catch (err) {
       document.getElementById('sendingOverlay').style.display    = 'none';
       document.getElementById('sendErrorOverlay').style.display  = 'block';
-      const msg = (err && err.text) ? err.text
-                : (err && err.message) ? err.message
-                : 'Something went wrong — check your internet connection and try again.';
-      document.getElementById('sendErrorMsg').textContent = msg;
+      document.getElementById('sendErrorMsg').textContent =
+        (err && err.message) ? err.message : 'Something went wrong — check your internet connection and try again.';
     }
   }
 
