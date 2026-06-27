@@ -1716,7 +1716,7 @@
   //    Note the Template ID
   // 4. Copy your Public Key from Account → API Keys
   // 5. Replace the three placeholders below and redeploy
-  emailjs.init({ publicKey: 'YOUR_PUBLIC_KEY' });
+  emailjs.init({ publicKey: 'EMueQQUV7SKYd3Ct6' });
 
   // ── Provider Portal ──────────────────────────────────────────────
   const PROVIDER_PIN = '1234'; // Change this to your own PIN before going live
@@ -1916,12 +1916,21 @@
 
     try {
       await emailjs.send(
-        'YOUR_SERVICE_ID',   // ← Replace with your EmailJS Service ID
-        'YOUR_TEMPLATE_ID',  // ← Replace with your EmailJS Template ID
+        'service_e4god2q',
+        'template_grcqjuj',
         {
           to_email:     visitData.email,
           subject:      'Visit Completed — ' + visitData.client + ' — ' + dateFormatted,
-          html_content: htmlContent
+          client_name:  visitData.client,
+          visit_date:   dateFormatted,
+          duration:     visitData.duration,
+          services:     visitData.services,
+          family_notes: visitData.notes,
+          provider_sig: providerSig,
+          client_sig:   clientSig,
+          wave_text:    visitData.wave
+                          ? 'Pay invoice: ' + visitData.wave
+                          : 'An invoice will be sent separately via Wave.'
         }
       );
       document.getElementById('sendingOverlay').style.display  = 'none';
