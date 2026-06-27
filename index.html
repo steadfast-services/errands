@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Steadfast Senior Services – Inquiries & Bookings</title>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
     :root {
       --navy:   #1a3a5c;
@@ -793,6 +795,223 @@
       background: white;
     }
 
+    /* ── PROVIDER PORTAL ── */
+    .nav-links a.nav-provider { color: var(--gold); border-left: 1px solid rgba(255,255,255,0.1); margin-left: 6px; padding-left: 18px; }
+    .nav-links a.nav-provider:hover { background: rgba(240,165,0,0.15); color: var(--gold2); }
+
+    .provider-header {
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      border-radius: 14px;
+      padding: 28px 36px;
+      color: white;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .provider-header .ph-icon { font-size: 32px; flex-shrink: 0; }
+    .provider-header h2 { font-family: 'Merriweather', serif; font-size: 22px; font-weight: 900; margin-bottom: 4px; }
+    .provider-header p { font-size: 14px; color: #b8d4f0; }
+
+    .step-bar { display: flex; align-items: flex-start; margin-bottom: 28px; }
+
+    .step-dot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      position: relative;
+    }
+
+    .step-dot::after {
+      content: '';
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+
+    .step-dot:last-child::after { display: none; }
+
+    .step-dot .sd-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--border);
+      color: var(--subtle);
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      transition: background 0.3s, color 0.3s;
+      flex-shrink: 0;
+    }
+
+    .step-dot.active .sd-num { background: var(--navy); color: white; }
+    .step-dot.done .sd-num { background: #2e7d32; color: white; }
+    .step-dot .sd-label { font-size: 11px; font-weight: 600; color: var(--subtle); text-align: center; line-height: 1.3; }
+    .step-dot.active .sd-label { color: var(--navy); font-weight: 700; }
+
+    .visit-step { display: none; }
+    .visit-step.active { display: block; }
+
+    .visit-form-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px 36px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .visit-form-card h3 { font-family: 'Merriweather', serif; font-size: 18px; font-weight: 900; color: var(--navy); margin-bottom: 6px; }
+    .visit-form-card .vfc-sub { font-size: 13.5px; color: var(--subtle); margin-bottom: 24px; line-height: 1.5; }
+
+    .svc-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .svc-check-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13.5px;
+      color: var(--text);
+      cursor: pointer;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .svc-check-item:hover { border-color: var(--blue); background: #f0f7ff; }
+    .svc-check-item input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--navy); cursor: pointer; flex-shrink: 0; }
+
+    .sig-wrap {
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fafbfd;
+      position: relative;
+      height: 220px;
+    }
+
+    .sig-wrap canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
+
+    .sig-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c5d5e8;
+      font-size: 14px;
+      font-weight: 600;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .sig-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; gap: 10px; }
+
+    .btn-clear {
+      background: none;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      padding: 9px 18px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--subtle);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-clear:hover { border-color: var(--navy); color: var(--navy); }
+
+    .btn-next {
+      background: var(--navy);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 11px 24px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-next:hover { background: var(--blue); }
+
+    .handoff-banner {
+      background: #fff8e6;
+      border: 1.5px solid var(--gold);
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .handoff-banner .hb-icon { font-size: 28px; flex-shrink: 0; }
+    .handoff-banner strong { display: block; font-size: 15px; color: var(--navy); margin-bottom: 2px; font-weight: 700; }
+    .handoff-banner span { font-size: 13px; color: var(--subtle); line-height: 1.4; }
+
+    .sending-overlay { text-align: center; padding: 48px 24px; }
+    .sending-overlay .so-icon { font-size: 52px; display: block; margin-bottom: 16px; }
+    .sending-overlay h3 { font-family: 'Merriweather', serif; font-size: 20px; color: var(--navy); margin-bottom: 8px; }
+    .sending-overlay p { font-size: 14px; color: var(--subtle); line-height: 1.6; }
+
+    /* PIN Modal */
+    .pin-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pin-modal.open { display: flex; }
+
+    .pin-box {
+      background: white;
+      border-radius: 14px;
+      padding: 36px;
+      max-width: 320px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+    }
+
+    .pin-box .pb-icon { font-size: 36px; display: block; margin-bottom: 12px; }
+    .pin-box h3 { font-family: 'Merriweather', serif; font-size: 20px; color: var(--navy); margin-bottom: 6px; }
+    .pin-box p { font-size: 13.5px; color: var(--subtle); margin-bottom: 20px; line-height: 1.5; }
+
+    .pin-box input {
+      width: 140px;
+      text-align: center;
+      font-size: 26px;
+      letter-spacing: 10px;
+      padding: 12px 10px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-family: monospace;
+      display: block;
+      margin: 0 auto 8px;
+    }
+
+    .pin-box input:focus { outline: none; border-color: var(--navy); }
+    .pin-error { color: #c62828; font-size: 13px; margin-bottom: 12px; min-height: 18px; }
+    .pin-btns { display: flex; gap: 10px; justify-content: center; margin-top: 16px; }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 720px) {
       .nav-links {
@@ -845,6 +1064,7 @@
       <li><a href="#" onclick="show('services')" id="nav-services">Our Services</a></li>
       <li><a href="#" onclick="show('inquire')"  id="nav-inquire">Ask a Question</a></li>
       <li><a href="#" onclick="show('book')"     id="nav-book">Book a Service</a></li>
+      <li><a href="#" onclick="openPinModal()"  id="nav-complete" class="nav-provider">🔐 Log Visit</a></li>
     </ul>
   </div>
 </nav>
@@ -1225,7 +1445,168 @@
     </div>
   </section>
 
+  <!-- COMPLETE VISIT (PROVIDER PORTAL) -->
+  <section class="section" id="complete">
+
+    <div class="provider-header">
+      <div class="ph-icon">📋</div>
+      <div>
+        <h2>Log Completed Visit</h2>
+        <p>Fill in visit details, collect both signatures, then send the signed record to the family.</p>
+      </div>
+    </div>
+
+    <div class="step-bar">
+      <div class="step-dot active" id="sdot-1"><div class="sd-num">1</div><div class="sd-label">Visit Details</div></div>
+      <div class="step-dot"        id="sdot-2"><div class="sd-num">2</div><div class="sd-label">Provider Signs</div></div>
+      <div class="step-dot"        id="sdot-3"><div class="sd-num">3</div><div class="sd-label">Client Signs</div></div>
+      <div class="step-dot"        id="sdot-4"><div class="sd-num">✓</div><div class="sd-label">Record Sent</div></div>
+    </div>
+
+    <!-- STEP 1: Visit Details -->
+    <div class="visit-step active" id="vstep-1">
+      <div class="visit-form-card">
+        <h3>Visit Details</h3>
+        <p class="vfc-sub">Record what was completed during today's visit.</p>
+        <div class="f-grid">
+          <div class="f-group">
+            <label>Client Name <span class="req">*</span></label>
+            <input type="text" id="v-client" placeholder="Jane Smith"/>
+          </div>
+          <div class="f-group">
+            <label>Family Email <span class="req">*</span></label>
+            <input type="email" id="v-email" placeholder="family@email.com"/>
+          </div>
+          <div class="f-group">
+            <label>Visit Date <span class="req">*</span></label>
+            <input type="date" id="v-date"/>
+          </div>
+          <div class="f-group">
+            <label>Duration <span class="req">*</span></label>
+            <select id="v-duration">
+              <option value="" disabled selected>Select hours…</option>
+              <option value="30 minutes">30 minutes</option>
+              <option value="1 hour">1 hour</option>
+              <option value="1.5 hours">1.5 hours</option>
+              <option value="2 hours">2 hours</option>
+              <option value="2.5 hours">2.5 hours</option>
+              <option value="3 hours">3 hours</option>
+              <option value="4 hours">4 hours</option>
+              <option value="5 hours">5 hours</option>
+              <option value="6+ hours">6+ hours</option>
+            </select>
+          </div>
+          <div class="f-group full">
+            <label>Services Performed <span class="req">*</span></label>
+            <div class="svc-checks" style="margin-top:6px;">
+              <label class="svc-check-item"><input type="checkbox" value="Grocery Shopping &amp; Delivery"> Grocery Shopping &amp; Delivery</label>
+              <label class="svc-check-item"><input type="checkbox" value="Medical Appointment Transport"> Medical Appointment Transport</label>
+              <label class="svc-check-item"><input type="checkbox" value="Prescription Pickup"> Prescription Pickup</label>
+              <label class="svc-check-item"><input type="checkbox" value="Companionship Visit"> Companionship Visit</label>
+              <label class="svc-check-item"><input type="checkbox" value="Errands &amp; Household Tasks"> Errands &amp; Household Tasks</label>
+              <label class="svc-check-item"><input type="checkbox" value="Wellness Check-In"> Wellness Check-In</label>
+            </div>
+          </div>
+          <div class="f-group full">
+            <label>Notes for Family <span class="req">*</span></label>
+            <textarea id="v-notes" rows="4" placeholder="How did the visit go? How was the client feeling? Anything the family should know or follow up on?"></textarea>
+          </div>
+          <div class="f-group full">
+            <label>Wave Invoice Link <small style="font-weight:400;color:var(--subtle);text-transform:none;letter-spacing:0;">(paste after creating invoice in Wave — optional)</small></label>
+            <input type="url" id="v-wave" placeholder="https://wave.com/i/…"/>
+          </div>
+        </div>
+        <button class="btn-next" onclick="goToStep(2)" style="margin-top:20px;width:100%;font-size:15px;padding:14px;">Next: Provider Signature →</button>
+        <div class="form-error" id="v-step1-error" style="margin-top:12px;display:none;">Please fill in all required fields and select at least one service.</div>
+      </div>
+    </div>
+
+    <!-- STEP 2: Provider Signs -->
+    <div class="visit-step" id="vstep-2">
+      <div class="visit-form-card">
+        <h3>Provider Signature</h3>
+        <p class="vfc-sub">Sign below to confirm you completed the listed services.</p>
+        <div class="sig-wrap">
+          <canvas id="providerCanvas"></canvas>
+          <div class="sig-placeholder" id="providerPlaceholder">Sign here with your finger or stylus</div>
+        </div>
+        <div class="sig-actions">
+          <button class="btn-clear" onclick="clearSig('provider')">Clear</button>
+          <div style="display:flex;gap:10px;">
+            <button class="btn-clear" onclick="goToStep(1)">← Back</button>
+            <button class="btn-next" onclick="goToStep(3)">Next: Hand to Client →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: Client Signs -->
+    <div class="visit-step" id="vstep-3">
+      <div class="handoff-banner">
+        <div class="hb-icon">📱</div>
+        <div>
+          <strong>Hand your device to the client</strong>
+          <span>Ask them to review the visit and sign below confirming services were received.</span>
+        </div>
+      </div>
+      <div class="visit-form-card">
+        <h3>Client Signature</h3>
+        <p class="vfc-sub">By signing, the client confirms the services described were completed to their satisfaction.</p>
+        <div class="sig-wrap">
+          <canvas id="clientCanvas"></canvas>
+          <div class="sig-placeholder" id="clientPlaceholder">Client signs here</div>
+        </div>
+        <div class="sig-actions">
+          <button class="btn-clear" onclick="clearSig('client')">Clear</button>
+          <div style="display:flex;gap:10px;">
+            <button class="btn-clear" onclick="goToStep(2)">← Back</button>
+            <button class="btn-next" id="submitVisitBtn" onclick="submitVisit()">Send Signed Record to Family →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4: Confirmation -->
+    <div class="visit-step" id="vstep-4">
+      <div class="visit-form-card">
+        <div class="sending-overlay" id="sendingOverlay">
+          <span class="so-icon">⏳</span>
+          <h3>Sending signed record…</h3>
+          <p>Emailing the visit summary and signatures to the family. Please wait.</p>
+        </div>
+        <div class="sending-overlay" id="sentOverlay" style="display:none;">
+          <span class="so-icon">✅</span>
+          <h3>Visit Record Sent!</h3>
+          <p id="sentMsg">The signed visit log has been emailed to the family.</p>
+          <button class="btn-next" onclick="resetVisitForm()" style="margin-top:24px;">Log Another Visit</button>
+        </div>
+        <div class="sending-overlay" id="sendErrorOverlay" style="display:none;">
+          <span class="so-icon">⚠️</span>
+          <h3>Send Failed</h3>
+          <p id="sendErrorMsg">Something went wrong sending the email.</p>
+          <button class="btn-next" onclick="goToStep(3)" style="margin-top:24px;background:#c62828;">← Try Again</button>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
 </main>
+
+<!-- PIN MODAL -->
+<div class="pin-modal" id="pinModal">
+  <div class="pin-box">
+    <span class="pb-icon">🔐</span>
+    <h3>Provider Access</h3>
+    <p>Enter your 4-digit PIN to access the visit log.</p>
+    <input type="password" id="pinInput" maxlength="4" inputmode="numeric" placeholder="••••" onkeydown="if(event.key==='Enter')checkPin()"/>
+    <div class="pin-error" id="pinError"></div>
+    <div class="pin-btns">
+      <button class="btn-clear" onclick="closePinModal()">Cancel</button>
+      <button class="btn-next" onclick="checkPin()">Enter →</button>
+    </div>
+  </div>
+</div>
 
 <!-- ── FOOTER ── -->
 <footer>
@@ -1323,6 +1704,253 @@
   wireForm('homeBookingForm', 'homeBookingBtn', 'homeBookingSuccess', 'homeBookingError', 'Request a Booking →');
   wireForm('inquiryForm',     'inquiryBtn',     'inquirySuccess',     'inquiryError',     'Send My Question →');
   wireForm('bookingForm',     'bookingBtn',     'bookingSuccess',     'bookingError',     'Submit Service Request →');
+
+  // ── EmailJS init ─────────────────────────────────────────────────
+  // SETUP (one time):
+  // 1. Go to emailjs.com and sign up (free — 200 emails/month)
+  // 2. Add a Gmail service and note the Service ID
+  // 3. Create a template with:
+  //      To:      {{to_email}}
+  //      Subject: {{subject}}
+  //      Body:    (HTML mode, paste exactly) {{{html_content}}}
+  //    Note the Template ID
+  // 4. Copy your Public Key from Account → API Keys
+  // 5. Replace the three placeholders below and redeploy
+  emailjs.init({ publicKey: 'YOUR_PUBLIC_KEY' });
+
+  // ── Provider Portal ──────────────────────────────────────────────
+  const PROVIDER_PIN = '1234'; // Change this to your own PIN before going live
+  let providerPad = null, clientPad = null, visitData = {};
+
+  function openPinModal() {
+    document.getElementById('pinInput').value = '';
+    document.getElementById('pinError').textContent = '';
+    document.getElementById('pinModal').classList.add('open');
+    setTimeout(() => document.getElementById('pinInput').focus(), 100);
+  }
+
+  function closePinModal() {
+    document.getElementById('pinModal').classList.remove('open');
+  }
+
+  function checkPin() {
+    const entered = document.getElementById('pinInput').value;
+    if (entered === PROVIDER_PIN) {
+      closePinModal();
+      show('complete');
+      document.getElementById('v-date').valueAsDate = new Date();
+      initPads();
+    } else {
+      document.getElementById('pinError').textContent = 'Incorrect PIN — try again.';
+      document.getElementById('pinInput').value = '';
+      document.getElementById('pinInput').focus();
+    }
+  }
+
+  function initPads() {
+    // Defer until the canvases are rendered and have dimensions
+    requestAnimationFrame(() => {
+      if (!providerPad) {
+        const pc = document.getElementById('providerCanvas');
+        sizePad(pc);
+        providerPad = new SignaturePad(pc, { penColor: '#1a3a5c', minWidth: 1.5, maxWidth: 2.5 });
+        providerPad.addEventListener('beginStroke', () => {
+          document.getElementById('providerPlaceholder').style.opacity = '0';
+        });
+      }
+      if (!clientPad) {
+        const cc = document.getElementById('clientCanvas');
+        sizePad(cc);
+        clientPad = new SignaturePad(cc, { penColor: '#1a3a5c', minWidth: 1.5, maxWidth: 2.5 });
+        clientPad.addEventListener('beginStroke', () => {
+          document.getElementById('clientPlaceholder').style.opacity = '0';
+        });
+      }
+    });
+  }
+
+  function sizePad(canvas) {
+    const ratio = Math.max(window.devicePixelRatio || 1, 1);
+    const rect  = canvas.parentElement.getBoundingClientRect();
+    canvas.width  = (rect.width  || 500) * ratio;
+    canvas.height = (rect.height || 220) * ratio;
+    canvas.getContext('2d').scale(ratio, ratio);
+  }
+
+  function clearSig(who) {
+    if (who === 'provider' && providerPad) {
+      providerPad.clear();
+      document.getElementById('providerPlaceholder').style.opacity = '1';
+    }
+    if (who === 'client' && clientPad) {
+      clientPad.clear();
+      document.getElementById('clientPlaceholder').style.opacity = '1';
+    }
+  }
+
+  function goToStep(n) {
+    // Validate before leaving step 1
+    if (n > 1) {
+      const client   = document.getElementById('v-client').value.trim();
+      const email    = document.getElementById('v-email').value.trim();
+      const date     = document.getElementById('v-date').value;
+      const duration = document.getElementById('v-duration').value;
+      const checked  = [...document.querySelectorAll('#vstep-1 .svc-check-item input:checked')];
+      const notes    = document.getElementById('v-notes').value.trim();
+      const errEl    = document.getElementById('v-step1-error');
+
+      if (!client || !email || !date || !duration || checked.length === 0 || !notes) {
+        errEl.style.display = 'block';
+        if (n !== 1) { goToStep(1); return; }
+        return;
+      }
+      errEl.style.display = 'none';
+      visitData = {
+        client,
+        email,
+        date,
+        duration,
+        services: checked.map(c => c.value).join(', '),
+        notes,
+        wave: document.getElementById('v-wave').value.trim()
+      };
+    }
+
+    // Validate provider signature before leaving step 2
+    if (n > 2 && providerPad && providerPad.isEmpty()) {
+      alert('Please add your signature before continuing.');
+      return;
+    }
+
+    // Update step visibility
+    document.querySelectorAll('.visit-step').forEach(s => s.classList.remove('active'));
+    document.getElementById('vstep-' + n).classList.add('active');
+
+    // Update step indicator dots
+    document.querySelectorAll('.step-dot').forEach((d, i) => {
+      d.classList.remove('active', 'done');
+      if (i + 1 < n)  d.classList.add('done');
+      if (i + 1 === n) d.classList.add('active');
+    });
+
+    // Re-size canvases when they first become visible
+    requestAnimationFrame(() => {
+      if (n === 2 && providerPad) { sizePad(document.getElementById('providerCanvas')); providerPad.clear(); document.getElementById('providerPlaceholder').style.opacity = '1'; }
+      if (n === 3 && clientPad)   { sizePad(document.getElementById('clientCanvas'));   clientPad.clear();   document.getElementById('clientPlaceholder').style.opacity = '1'; }
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async function submitVisit() {
+    if (clientPad && clientPad.isEmpty()) {
+      alert('Client signature is required before sending.');
+      return;
+    }
+
+    goToStep(4);
+
+    const providerSig = providerPad.toDataURL('image/png');
+    const clientSig   = clientPad.toDataURL('image/png');
+
+    const dateFormatted = new Date(visitData.date + 'T12:00:00')
+      .toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+    const waveRow = visitData.wave
+      ? `<tr><td style="padding:8px 28px 24px;">
+           <a href="${visitData.wave}" style="display:inline-block;background:#f0a500;color:#1a3a5c;font-weight:700;padding:13px 28px;border-radius:8px;text-decoration:none;font-size:15px;">Pay Invoice via Wave →</a>
+         </td></tr>`
+      : `<tr><td style="padding:4px 28px 24px;font-size:13px;color:#5a6a7e;">An invoice will be sent separately via Wave.</td></tr>`;
+
+    const htmlContent = `
+<div style="font-family:Arial,sans-serif;max-width:620px;margin:0 auto;background:#f0f4f8;padding:24px;">
+  <div style="background:linear-gradient(135deg,#1a3a5c,#2c5f8a);border-radius:12px 12px 0 0;padding:28px 32px;">
+    <div style="font-size:20px;font-weight:900;color:white;font-family:Georgia,serif;margin-bottom:4px;">⚓ Steadfast Senior Services</div>
+    <div style="font-size:13px;color:#b8d4f0;">Signed Visit Completion Record</div>
+  </div>
+  <div style="background:white;border-radius:0 0 12px 12px;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+      <tr><td style="padding:28px 28px 8px;">
+        <h2 style="margin:0;font-family:Georgia,serif;color:#1a3a5c;font-size:20px;">Visit Completed — ${visitData.client}</h2>
+      </td></tr>
+      <tr><td style="padding:16px 28px;">
+        <table cellpadding="0" cellspacing="0" width="100%" style="background:#f7faff;border:1px solid #dde8f5;border-radius:8px;">
+          <tr>
+            <td style="padding:12px 16px;font-size:12px;font-weight:700;color:#5a6a7e;text-transform:uppercase;letter-spacing:1px;width:110px;">Date</td>
+            <td style="padding:12px 16px;font-size:14px;color:#2d3748;">${dateFormatted}</td>
+          </tr>
+          <tr style="border-top:1px solid #dde8f5;">
+            <td style="padding:12px 16px;font-size:12px;font-weight:700;color:#5a6a7e;text-transform:uppercase;letter-spacing:1px;">Duration</td>
+            <td style="padding:12px 16px;font-size:14px;color:#2d3748;">${visitData.duration}</td>
+          </tr>
+          <tr style="border-top:1px solid #dde8f5;">
+            <td style="padding:12px 16px;font-size:12px;font-weight:700;color:#5a6a7e;text-transform:uppercase;letter-spacing:1px;">Services</td>
+            <td style="padding:12px 16px;font-size:14px;color:#2d3748;">${visitData.services}</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td style="padding:8px 28px 20px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2c5f8a;margin-bottom:10px;">Provider Notes for Family</div>
+        <div style="background:#f7faff;border-left:3px solid #2c5f8a;padding:14px 18px;border-radius:0 8px 8px 0;font-size:14px;color:#2d3748;line-height:1.7;">${visitData.notes.replace(/\n/g, '<br>')}</div>
+      </td></tr>
+      <tr><td style="padding:0 28px 20px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2c5f8a;margin-bottom:10px;">Provider Signature</div>
+        <img src="${providerSig}" style="max-width:300px;border:1px solid #dde8f5;border-radius:6px;display:block;background:#fafbfd;"/>
+      </td></tr>
+      <tr><td style="padding:0 28px 8px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#2c5f8a;margin-bottom:10px;">Client Confirmation Signature</div>
+        <img src="${clientSig}" style="max-width:300px;border:1px solid #dde8f5;border-radius:6px;display:block;background:#fafbfd;"/>
+        <div style="font-size:12px;color:#5a6a7e;margin-top:8px;">Client confirmed services were received and completed to their satisfaction.</div>
+      </td></tr>
+      ${waveRow}
+      <tr><td style="padding:20px 28px;background:#f7faff;border-top:1px solid #dde8f5;border-radius:0 0 12px 12px;">
+        <div style="font-size:13px;font-weight:700;color:#1a3a5c;margin-bottom:4px;">Steadfast Senior Services</div>
+        <div style="font-size:12px;color:#5a6a7e;line-height:1.8;">
+          📞 (781) 929-4623 &nbsp;|&nbsp; ✉ steadfastseniorservices@gmail.com<br>
+          Serving within 40 miles of Westwood, MA &nbsp;·&nbsp; CORI Checked &nbsp;·&nbsp; Fully Insured
+        </div>
+      </td></tr>
+    </table>
+  </div>
+</div>`;
+
+    try {
+      await emailjs.send(
+        'YOUR_SERVICE_ID',   // ← Replace with your EmailJS Service ID
+        'YOUR_TEMPLATE_ID',  // ← Replace with your EmailJS Template ID
+        {
+          to_email:     visitData.email,
+          subject:      'Visit Completed — ' + visitData.client + ' — ' + dateFormatted,
+          html_content: htmlContent
+        }
+      );
+      document.getElementById('sendingOverlay').style.display  = 'none';
+      document.getElementById('sentOverlay').style.display     = 'block';
+      document.getElementById('sentMsg').textContent = 'Signed visit record emailed to ' + visitData.email;
+    } catch (err) {
+      document.getElementById('sendingOverlay').style.display    = 'none';
+      document.getElementById('sendErrorOverlay').style.display  = 'block';
+      document.getElementById('sendErrorMsg').textContent =
+        (err && err.text) ? err.text : 'Email failed — check your EmailJS setup in the code.';
+    }
+  }
+
+  function resetVisitForm() {
+    ['v-client','v-email','v-date','v-duration','v-notes','v-wave'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el.tagName === 'SELECT') el.selectedIndex = 0;
+      else el.value = '';
+    });
+    document.querySelectorAll('#vstep-1 .svc-check-item input').forEach(c => c.checked = false);
+    document.getElementById('v-date').valueAsDate = new Date();
+    if (providerPad) { providerPad.clear(); document.getElementById('providerPlaceholder').style.opacity = '1'; }
+    if (clientPad)   { clientPad.clear();   document.getElementById('clientPlaceholder').style.opacity  = '1'; }
+    document.getElementById('sendingOverlay').style.display   = 'block';
+    document.getElementById('sentOverlay').style.display      = 'none';
+    document.getElementById('sendErrorOverlay').style.display = 'none';
+    visitData = {};
+    goToStep(1);
+  }
 </script>
 
 <!--
