@@ -27,6 +27,25 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    .skip-link {
+      position: absolute;
+      top: -50px;
+      left: 10px;
+      background: var(--navy);
+      color: white;
+      padding: 10px 18px;
+      border-radius: 0 0 6px 6px;
+      font-weight: 700;
+      font-size: 14px;
+      z-index: 1000;
+      transition: top 0.15s;
+    }
+    .skip-link:focus {
+      top: 0;
+      outline: 3px solid var(--gold);
+      outline-offset: 2px;
+    }
+
     body {
       font-family: 'Open Sans', Arial, sans-serif;
       background: var(--bg);
@@ -641,7 +660,7 @@
       margin-bottom: 6px;
     }
 
-    .f-group label .req { color: var(--gold); }
+    .f-group label .req { color: #b07800; }
 
     .f-group input,
     .f-group select,
@@ -1172,6 +1191,8 @@
 </head>
 <body>
 
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
 <!-- ── NAVIGATION ── -->
 <nav>
   <div class="nav-inner">
@@ -1189,7 +1210,7 @@
 </nav>
 
 <!-- ── CONTENT ── -->
-<main>
+<main id="main-content">
 
   <!-- HOME -->
   <section class="section active" id="home">
@@ -1200,7 +1221,7 @@
         <h1>Helping Seniors Stay<br>Independent &amp; Connected</h1>
         <p>Steadfast Senior Services delivers reliable, one-on-one errand and companion support across Massachusetts — so your loved ones can thrive at home with the peace of mind your family deserves.</p>
         <div class="hero-contact">
-          <a href="tel:7819294623"><span class="hc-icon">📞</span>(781) 929-4623</a>
+          <a href="tel:7819294623" aria-label="Call or text (781) 929-4623"><span class="hc-icon">📞</span>(781) 929-4623</a>
           <a href="mailto:steadfastseniorservices@gmail.com"><span class="hc-icon">✉</span>steadfastseniorservices@gmail.com</a>
         </div>
         <div class="hero-ctas">
@@ -1329,9 +1350,9 @@
           </div>
           <button type="submit" class="btn-submit" id="homeBookingBtn">Request a Booking →</button>
           <div class="no-min-note">No minimum hours — book exactly what you need.</div>
-          <div class="form-error" id="homeBookingError">Something went wrong. Please try again or call us directly.</div>
+          <div class="form-error" id="homeBookingError" role="alert" aria-live="assertive">Something went wrong. Please try again or call us directly.</div>
         </form>
-        <div class="form-success" id="homeBookingSuccess">
+        <div class="form-success" id="homeBookingSuccess" role="status" aria-live="polite">
           <span class="s-icon">🎉</span>
           <h3>Request Submitted!</h3>
           <p>We'll confirm your appointment within 24 hours. We look forward to helping!</p>
@@ -1360,9 +1381,9 @@
             <span class="char-counter" id="charCounter">0/250</span>
           </div>
           <button type="submit" class="qm-btn" id="quickBtn">Send Message →</button>
-          <div class="form-error" id="quickError">Something went wrong. Please try again or call us directly.</div>
+          <div class="form-error" id="quickError" role="alert" aria-live="assertive">Something went wrong. Please try again or call us directly.</div>
         </form>
-        <div class="form-success" id="quickSuccess">
+        <div class="form-success" id="quickSuccess" role="status" aria-live="polite">
           <span class="s-icon">✅</span>
           <h3>Message Sent!</h3>
           <p>We'll get back to you shortly by phone or text.</p>
@@ -1471,10 +1492,10 @@
         </div>
         <button type="submit" class="btn-submit" id="inquiryBtn">Send My Question →</button>
         <div class="form-note">We respond within a few hours — usually the same day.</div>
-        <div class="form-error" id="inquiryError">Something went wrong. Please try again or call us directly.</div>
+        <div class="form-error" id="inquiryError" role="alert" aria-live="assertive">Something went wrong. Please try again or call us directly.</div>
       </form>
 
-      <div class="form-success" id="inquirySuccess">
+      <div class="form-success" id="inquirySuccess" role="status" aria-live="polite">
         <span class="s-icon">✅</span>
         <h3>Message Received!</h3>
         <p>Thanks for reaching out. We'll respond to your question within a few hours — usually the same day.</p>
@@ -1552,10 +1573,10 @@
         </div>
         <button type="submit" class="btn-submit" id="bookingBtn">Submit Service Request →</button>
         <div class="form-note">We'll confirm your appointment within 24 hours.</div>
-        <div class="form-error" id="bookingError">Something went wrong. Please try again or call us directly.</div>
+        <div class="form-error" id="bookingError" role="alert" aria-live="assertive">Something went wrong. Please try again or call us directly.</div>
       </form>
 
-      <div class="form-success" id="bookingSuccess">
+      <div class="form-success" id="bookingSuccess" role="status" aria-live="polite">
         <span class="s-icon">🎉</span>
         <h3>Request Submitted!</h3>
         <p>We've received your service request and will confirm your appointment within 24 hours. We look forward to helping!</p>
@@ -1712,7 +1733,7 @@
           </div>
         </div>
         <button class="btn-next" onclick="goToStep(2)" style="margin-top:20px;width:100%;font-size:15px;padding:14px;">Next: Provider Signature →</button>
-        <div class="form-error" id="v-step1-error" style="margin-top:12px;display:none;">Please fill in all required fields and select at least one service.</div>
+        <div class="form-error" id="v-step1-error" style="margin-top:12px;display:none;" role="alert" aria-live="assertive">Please fill in all required fields and select at least one service.</div>
       </div>
     </div>
 
@@ -1774,18 +1795,18 @@
     <!-- STEP 4: Confirmation -->
     <div class="visit-step" id="vstep-4">
       <div class="visit-form-card">
-        <div class="sending-overlay" id="sendingOverlay">
+        <div class="sending-overlay" id="sendingOverlay" role="status" aria-live="polite">
           <span class="so-icon">⏳</span>
           <h3>Sending signed record…</h3>
           <p>Emailing the visit summary and signatures to the family. Please wait.</p>
         </div>
-        <div class="sending-overlay" id="sentOverlay" style="display:none;">
+        <div class="sending-overlay" id="sentOverlay" style="display:none;" role="status" aria-live="polite">
           <span class="so-icon">✅</span>
           <h3>Visit Record Sent!</h3>
           <p id="sentMsg">The signed visit log has been emailed to the family.</p>
           <button class="btn-next" onclick="resetVisitForm()" style="margin-top:24px;">Log Another Visit</button>
         </div>
-        <div class="sending-overlay" id="sendErrorOverlay" style="display:none;">
+        <div class="sending-overlay" id="sendErrorOverlay" style="display:none;" role="alert" aria-live="assertive">
           <span class="so-icon">⚠️</span>
           <h3>Send Failed</h3>
           <p id="sendErrorMsg">Something went wrong sending the email.</p>
@@ -1804,8 +1825,8 @@
     <span class="pb-icon">🔐</span>
     <h3>Provider Access</h3>
     <p>Enter your 6-digit PIN to access the visit log.</p>
-    <input type="password" id="pinInput" maxlength="6" inputmode="numeric" placeholder="••••••" onkeydown="if(event.key==='Enter')checkPin()"/>
-    <div class="pin-error" id="pinError"></div>
+    <input type="password" id="pinInput" maxlength="6" inputmode="numeric" placeholder="••••••" aria-label="6-digit provider PIN" onkeydown="if(event.key==='Enter')checkPin()"/>
+    <div class="pin-error" id="pinError" role="alert" aria-live="assertive"></div>
     <div class="pin-btns">
       <button class="btn-clear" onclick="closePinModal()">Cancel</button>
       <button class="btn-next" onclick="checkPin()">Enter →</button>
@@ -1817,11 +1838,14 @@
 <footer>
   <strong>Steadfast Senior Services</strong>
   <br>
-  <a href="tel:7819294623">📞 (781) 929-4623</a>
+  <a href="tel:7819294623">📞 (781) 929-4623</a> (call or text)
   &nbsp;|&nbsp;
   <a href="mailto:steadfastseniorservices@gmail.com">✉ steadfastseniorservices@gmail.com</a>
+  &nbsp;|&nbsp; 💬 Live chat available on this site
   <br>
   Serving all of Massachusetts &nbsp;|&nbsp; Insured · Background Checked · Locally Owned
+  <br>
+  <small>Deaf or hard of hearing? Text the number above, use the live chat, or dial 711 for Massachusetts Relay.</small>
   <small>© 2026 Steadfast Senior Services. All rights reserved.</small>
   <div class="footer-links">
     <a href="#" onclick="show('privacy')">Privacy Policy</a>
