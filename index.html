@@ -1149,6 +1149,115 @@
     .pin-error { color: #c62828; font-size: 13px; margin-bottom: 12px; min-height: 18px; }
     .pin-btns { display: flex; gap: 10px; justify-content: center; margin-top: 16px; }
 
+    .resend-link {
+      display: block;
+      margin: 14px auto 0;
+      background: none;
+      border: none;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .resend-link:disabled { color: var(--subtle); text-decoration: none; cursor: default; }
+
+    /* ── PROVIDER DASHBOARD ── */
+    .dash-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin: 28px 0;
+    }
+    .dash-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      text-align: left;
+      cursor: pointer;
+      font-family: 'Open Sans', sans-serif;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .dash-card:hover { border-color: var(--blue); transform: translateY(-2px); }
+    .dash-card-icon { font-size: 30px; }
+    .dash-card-title { font-family: 'Merriweather', serif; font-size: 17px; font-weight: 900; color: var(--navy); }
+    .dash-card-desc { font-size: 13.5px; color: var(--subtle); line-height: 1.5; }
+
+    .logout-link {
+      display: block;
+      margin: 8px auto 0;
+      background: none;
+      border: none;
+      color: var(--subtle);
+      font-size: 13px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .logout-link:hover { color: var(--navy); }
+
+    /* ── CARE TIER BADGES ── */
+    .tier-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+    .tier-standard { background: var(--card); border: 1px solid var(--border); color: var(--subtle); }
+    .tier-enhanced { background: #fff8e1; border: 1px solid var(--gold); color: #7a5000; }
+    .tier-complex  { background: #fdecea; border: 1px solid #ef9a9a; color: #c62828; }
+
+    /* ── CLIENT PROFILES ── */
+    .client-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .client-card:hover, .client-card:focus { border-color: var(--blue); outline: none; }
+    .cc-name { font-family: 'Merriweather', serif; font-size: 15px; font-weight: 700; color: var(--navy); }
+    .cc-meta { font-size: 12.5px; color: var(--subtle); margin-top: 4px; }
+    .tier-notes {
+      background: #f7faff;
+      border-left: 3px solid var(--blue);
+      border-radius: 0 6px 6px 0;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--text);
+      margin-top: 10px;
+    }
+
+    .visit-entry {
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+    }
+    .visit-entry:last-child { border-bottom: none; }
+    .ve-date { font-size: 13px; font-weight: 700; color: var(--navy); }
+    .ve-services { font-size: 13px; color: var(--text); margin-top: 3px; }
+    .ve-internal {
+      background: #fff8e1;
+      border-left: 3px solid var(--gold);
+      border-radius: 0 6px 6px 0;
+      padding: 8px 12px;
+      font-size: 12.5px;
+      color: #7a5000;
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      .dash-cards { grid-template-columns: 1fr; }
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 720px) {
       .nav-links {
@@ -1203,8 +1312,10 @@
       <li><a href="#" onclick="show('services')" id="nav-services">Our Services</a></li>
       <li><a href="#" onclick="show('inquire')"  id="nav-inquire">Ask a Question</a></li>
       <li><a href="#" onclick="show('book')"     id="nav-book">Book a Service</a></li>
-      <li><a href="#" onclick="openPinModal()"  id="nav-complete" class="nav-provider">🔐 Log Visit</a></li>
+      <li><a href="#" onclick="openProviderPortal()" id="nav-complete" class="nav-provider">🔐 Provider Portal</a></li>
       <li><a href="#" onclick="show('privacy')" id="nav-privacy"  style="display:none;">Privacy</a></li>
+      <li><a href="#" onclick="show('dashboard')" id="nav-dashboard" style="display:none;">Dashboard</a></li>
+      <li><a href="#" onclick="show('clients')" id="nav-clients" style="display:none;">Client Profiles</a></li>
     </ul>
   </div>
 </nav>
@@ -1589,7 +1700,7 @@
   <section class="section" id="privacy">
     <div class="privacy-card">
       <h2>Privacy Policy</h2>
-      <p class="pp-date">Effective June 28, 2026 &nbsp;·&nbsp; Steadfast Senior Services, Westwood, MA</p>
+      <p class="pp-date">Effective June 28, 2026 &nbsp;·&nbsp; Steadfast Senior Services, Norwood, MA</p>
 
       <h3>What Information We Collect</h3>
       <p>When you book a service, ask a question, or contact us, we collect:</p>
@@ -1618,10 +1729,11 @@
         <li><strong>ImgBB</strong> (imgbb.com) — temporarily hosts digital signature images included in emails</li>
         <li><strong>Gmail / Google</strong> — our business email provider</li>
         <li><strong>Wave</strong> (waveapps.com) — invoicing and payment processing</li>
+        <li><strong>Cloudflare</strong> (cloudflare.com) — securely stores client profiles and visit history so caregivers can review a client's care needs before a visit; also handles provider login verification</li>
       </ul>
 
       <h3>Data Security</h3>
-      <p>Our website is served over HTTPS (encrypted in transit). We maintain a Written Information Security Program (WISP) in compliance with Massachusetts 201 CMR 17.00. Access to your information is limited to the service provider only. We do not store payment card numbers — all card payments are processed by Wave.</p>
+      <p>Our website is served over HTTPS (encrypted in transit). We maintain a Written Information Security Program (WISP) in compliance with Massachusetts 201 CMR 17.00. Access to client profiles and visit history is limited to logged-in, verified caregivers only — provider login requires both a private PIN and a one-time code sent to that caregiver's own email (two-factor authentication). We do not store payment card numbers — all card payments are processed by Wave.</p>
 
       <h3>Data Retention</h3>
       <p>We retain service records (including signed visit logs and correspondence) for seven (7) years from the date of service, after which they are securely deleted. You may request earlier deletion of your records by contacting us directly.</p>
@@ -1651,7 +1763,7 @@
         <strong>Questions or Requests</strong><br>
         Contact us at any time regarding your privacy rights:<br>
         📞 (781) 929-4623 &nbsp;·&nbsp; ✉ <a href="mailto:steadfastseniorservices@gmail.com">steadfastseniorservices@gmail.com</a><br>
-        Steadfast Senior Services &nbsp;·&nbsp; Westwood, MA
+        Steadfast Senior Services &nbsp;·&nbsp; Norwood, MA
       </div>
     </div>
   </section>
@@ -1686,8 +1798,14 @@
         <p class="vfc-sub">Record what was completed during today's visit.</p>
         <div class="f-grid">
           <div class="f-group">
-            <label>Client Name <span class="req">*</span></label>
-            <input type="text" id="v-client" placeholder="Jane Smith"/>
+            <label>Client <span class="req">*</span></label>
+            <select id="v-client-select" onchange="onClientSelectChange()">
+              <option value="" disabled selected>Loading clients…</option>
+            </select>
+          </div>
+          <div class="f-group" id="v-new-client-name-group" style="display:none;">
+            <label>New Client's Name <span class="req">*</span></label>
+            <input type="text" id="v-new-client-name" placeholder="Jane Smith"/>
           </div>
           <div class="f-group">
             <label>Family Email <span class="req">*</span></label>
@@ -1728,11 +1846,15 @@
             <textarea id="v-notes" rows="4" placeholder="How did the visit go? How was the client feeling? Anything the family should know or follow up on?"></textarea>
           </div>
           <div class="f-group full">
+            <label>Caregiver Notes — Internal Only <small style="font-weight:400;color:var(--subtle);text-transform:none;letter-spacing:0;">(never sent to the family — visible to other caregivers for prep)</small></label>
+            <textarea id="v-internal-notes" rows="3" placeholder="Anything the next caregiver should know before their visit — behavior, triggers, what worked well…"></textarea>
+          </div>
+          <div class="f-group full">
             <label>Wave Invoice Link <small style="font-weight:400;color:var(--subtle);text-transform:none;letter-spacing:0;">(paste after creating invoice in Wave — optional)</small></label>
             <input type="url" id="v-wave" placeholder="https://wave.com/i/…"/>
           </div>
         </div>
-        <button class="btn-next" onclick="goToStep(2)" style="margin-top:20px;width:100%;font-size:15px;padding:14px;">Next: Provider Signature →</button>
+        <button class="btn-next" id="step1NextBtn" onclick="proceedFromStep1()" style="margin-top:20px;width:100%;font-size:15px;padding:14px;">Next: Provider Signature →</button>
         <div class="form-error" id="v-step1-error" style="margin-top:12px;display:none;" role="alert" aria-live="assertive">Please fill in all required fields and select at least one service.</div>
       </div>
     </div>
@@ -1817,6 +1939,158 @@
 
   </section>
 
+  <!-- PROVIDER DASHBOARD -->
+  <section class="section" id="dashboard">
+    <div class="provider-header">
+      <div class="ph-icon">🗂️</div>
+      <div>
+        <h2>Provider Dashboard</h2>
+        <p>Log a visit, or look up a client's history and notes before you go.</p>
+        <div class="provider-badge">
+          <div class="pb-dot"></div>
+          <span class="pb-name" id="dashBadgeName">—</span>
+          <span class="pb-role" id="dashBadgeRole"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-cards">
+      <button class="dash-card" onclick="startVisitLog()">
+        <span class="dash-card-icon">📋</span>
+        <span class="dash-card-title">Log a Visit</span>
+        <span class="dash-card-desc">Record today's visit and send the signed report to the family.</span>
+      </button>
+      <button class="dash-card" onclick="showClientList()">
+        <span class="dash-card-icon">🗂️</span>
+        <span class="dash-card-title">Client Profiles</span>
+        <span class="dash-card-desc">Review care tier, notes, and visit history before your visit — or add someone new.</span>
+      </button>
+    </div>
+
+    <button class="logout-link" onclick="providerLogout()">Log out</button>
+  </section>
+
+  <!-- CLIENT PROFILES -->
+  <section class="section" id="clients">
+    <div class="provider-header">
+      <div class="ph-icon">🗂️</div>
+      <div>
+        <h2>Client Profiles</h2>
+        <p>Review a client's care tier, notes, and visit history — or add someone new.</p>
+        <div class="provider-badge">
+          <div class="pb-dot"></div>
+          <span class="pb-name" id="clientsBadgeName">—</span>
+          <span class="pb-role" id="clientsBadgeRole"></span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-clear" onclick="showProviderDashboard()" style="margin-bottom:16px;">← Back to Dashboard</button>
+
+    <!-- LIST VIEW -->
+    <div id="clientListView">
+      <div class="f-group full" style="margin-bottom:16px;">
+        <label>Search Clients</label>
+        <input type="text" id="clientSearchInput" placeholder="Type a name…" oninput="debouncedClientSearch()"/>
+      </div>
+      <div id="clientListError" class="form-error" role="alert" aria-live="assertive" style="display:none;"></div>
+      <div id="clientListEmpty" style="display:none;color:var(--subtle);font-size:14px;padding:20px 0;">No clients yet — add one below.</div>
+      <div id="clientCards"></div>
+      <button class="btn-next" onclick="openNewClientForm()" style="margin-top:16px;">+ Add a New Client</button>
+    </div>
+
+    <!-- NEW CLIENT FORM -->
+    <div id="newClientView" style="display:none;">
+      <div class="visit-form-card">
+        <h3>Add a New Client</h3>
+        <div class="f-grid">
+          <div class="f-group">
+            <label>Client Name <span class="req">*</span></label>
+            <input type="text" id="newClientName" placeholder="Jane Smith"/>
+          </div>
+          <div class="f-group">
+            <label>Family Email <span class="req">*</span></label>
+            <input type="email" id="newClientEmail" placeholder="family@email.com"/>
+          </div>
+          <div class="f-group full">
+            <label>Address <small style="font-weight:400;color:var(--subtle);text-transform:none;letter-spacing:0;">(optional)</small></label>
+            <input type="text" id="newClientAddress" placeholder="123 Main St, City, MA"/>
+          </div>
+          <div class="f-group full" id="ownerTierGroup" style="display:none;">
+            <label>Care Tier</label>
+            <select id="newClientTier">
+              <option value="Standard">Standard Companion &amp; Errand Care</option>
+              <option value="Enhanced Support">Enhanced Support</option>
+              <option value="Complex/Safety-Support">Complex/Safety-Support (2 workers required)</option>
+            </select>
+          </div>
+          <div class="f-group full" id="ownerTierNotesGroup" style="display:none;">
+            <label>Care Tier Notes <small style="font-weight:400;color:var(--subtle);text-transform:none;letter-spacing:0;">(private — never shown to family)</small></label>
+            <textarea id="newClientTierNotes" rows="3" placeholder="Triggers, considerations, why this tier…"></textarea>
+          </div>
+        </div>
+        <p id="tierDefaultNote" style="font-size:13px;color:var(--subtle);margin-top:8px;display:none;">Tier will be set to Standard — the Owner sets other tiers after a full intake conversation.</p>
+        <div style="display:flex;gap:10px;margin-top:16px;">
+          <button class="btn-clear" onclick="closeNewClientForm()">Cancel</button>
+          <button class="btn-next" onclick="submitNewClient()">Save Client</button>
+        </div>
+        <div class="form-error" id="newClientError" role="alert" aria-live="assertive" style="display:none;margin-top:10px;"></div>
+      </div>
+    </div>
+
+    <!-- DETAIL VIEW -->
+    <div id="clientDetailView" style="display:none;">
+      <button class="btn-clear" onclick="showClientList()" style="margin-bottom:16px;">← Back to Client List</button>
+      <div class="visit-form-card">
+        <div id="clientDetailHeader"></div>
+        <div id="clientEditControls" style="display:none;margin-top:10px;">
+          <button class="btn-clear" onclick="openEditClientForm()">Edit</button>
+          <button class="btn-clear" onclick="deleteClient()" style="color:#c62828;border-color:#e0a8a8;">Delete</button>
+        </div>
+        <h3 style="margin-top:24px;">Visit History</h3>
+        <div id="clientVisitHistory"></div>
+      </div>
+    </div>
+
+    <!-- EDIT CLIENT FORM (Owner only — server also enforces this) -->
+    <div id="editClientView" style="display:none;">
+      <div class="visit-form-card">
+        <h3>Edit Client</h3>
+        <div class="f-grid">
+          <div class="f-group">
+            <label>Client Name</label>
+            <input type="text" id="editClientName"/>
+          </div>
+          <div class="f-group">
+            <label>Family Email</label>
+            <input type="email" id="editClientEmail"/>
+          </div>
+          <div class="f-group full">
+            <label>Address</label>
+            <input type="text" id="editClientAddress"/>
+          </div>
+          <div class="f-group full">
+            <label>Care Tier</label>
+            <select id="editClientTier">
+              <option value="Standard">Standard Companion &amp; Errand Care</option>
+              <option value="Enhanced Support">Enhanced Support</option>
+              <option value="Complex/Safety-Support">Complex/Safety-Support (2 workers required)</option>
+            </select>
+          </div>
+          <div class="f-group full">
+            <label>Care Tier Notes <small style="font-weight:400;color:var(--subtle);text-transform:none;letter-spacing:0;">(private — never shown to family)</small></label>
+            <textarea id="editClientTierNotes" rows="3"></textarea>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:16px;">
+          <button class="btn-clear" onclick="closeEditClientForm()">Cancel</button>
+          <button class="btn-next" onclick="submitEditClient()">Save Changes</button>
+        </div>
+        <div class="form-error" id="editClientError" role="alert" aria-live="assertive" style="display:none;margin-top:10px;"></div>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <!-- PIN MODAL -->
@@ -1831,6 +2105,22 @@
       <button class="btn-clear" onclick="closePinModal()">Cancel</button>
       <button class="btn-next" onclick="checkPin()">Enter →</button>
     </div>
+  </div>
+</div>
+
+<!-- OTP MODAL (2FA) -->
+<div class="pin-modal" id="otpModal">
+  <div class="pin-box">
+    <span class="pb-icon">📧</span>
+    <h3>Check Your Email</h3>
+    <p id="otpSentTo">We sent a 6-digit code to your email. Enter it below — it expires in 5 minutes.</p>
+    <input type="text" id="otpInput" maxlength="6" inputmode="numeric" placeholder="••••••" aria-label="6-digit verification code" onkeydown="if(event.key==='Enter')verifyOtp()"/>
+    <div class="pin-error" id="otpError" role="alert" aria-live="assertive"></div>
+    <div class="pin-btns">
+      <button class="btn-clear" onclick="cancelOtp()">Cancel</button>
+      <button class="btn-next" onclick="verifyOtp()">Verify →</button>
+    </div>
+    <button class="resend-link" id="resendBtn" onclick="resendOtp()">Resend code</button>
   </div>
 </div>
 
@@ -1943,6 +2233,12 @@
   const WORKER_URL = 'https://steadfast-auth.steadfastseniorservices.workers.dev';
 
   let currentProvider = null;
+  let sessionToken    = null;
+  let pendingPin      = null;
+  let currentClientId = null;
+  let clientListCache = [];
+  let clientSearchTimer   = null;
+  let otpResendCooldown   = false;
   let providerPad = null, clientPad = null, visitData = {};
 
   function openPinModal() {
@@ -1956,10 +2252,18 @@
     document.getElementById('pinModal').classList.remove('open');
   }
 
+  function openProviderPortal() {
+    if (sessionToken && currentProvider) {
+      showProviderDashboard();
+    } else {
+      openPinModal();
+    }
+  }
+
   async function checkPin() {
     const entered = document.getElementById('pinInput').value.trim();
     const errEl   = document.getElementById('pinError');
-    const btn     = document.querySelector('.pin-btns .btn-next');
+    const btn     = document.querySelector('#pinModal .btn-next');
     errEl.textContent = '';
     if (btn) { btn.disabled = true; btn.textContent = 'Checking…'; }
 
@@ -1971,14 +2275,12 @@
       });
       const data = await res.json();
 
-      if (data.ok) {
-        currentProvider = { name: data.name, role: data.role };
-        document.getElementById('providerBadgeName').textContent = data.name;
-        document.getElementById('providerBadgeRole').textContent = data.role;
+      if (data.ok && data.requiresOtp) {
+        pendingPin = entered;
         closePinModal();
-        show('complete');
-        document.getElementById('v-date').valueAsDate = new Date();
-        initPads();
+        openOtpModal(data.name);
+      } else if (data.error === 'no_email_on_file') {
+        errEl.textContent = 'No email on file for this PIN — contact the owner to add one.';
       } else {
         errEl.textContent = 'Incorrect PIN — try again.';
         document.getElementById('pinInput').value = '';
@@ -1989,6 +2291,417 @@
     } finally {
       if (btn) { btn.disabled = false; btn.textContent = 'Enter →'; }
     }
+  }
+
+  // ── 2FA (email OTP) ───────────────────────────────────────────────
+  function openOtpModal(name) {
+    document.getElementById('otpInput').value = '';
+    document.getElementById('otpError').textContent = '';
+    document.getElementById('otpSentTo').textContent =
+      'We sent a 6-digit code to the email on file for ' + name + '. Enter it below — it expires in 5 minutes.';
+    document.getElementById('otpModal').classList.add('open');
+    setTimeout(() => document.getElementById('otpInput').focus(), 100);
+  }
+
+  function cancelOtp() {
+    document.getElementById('otpModal').classList.remove('open');
+    pendingPin = null;
+  }
+
+  async function verifyOtp() {
+    const code  = document.getElementById('otpInput').value.trim();
+    const errEl = document.getElementById('otpError');
+    const btn   = document.querySelector('#otpModal .btn-next');
+    errEl.textContent = '';
+    if (btn) { btn.disabled = true; btn.textContent = 'Verifying…'; }
+
+    try {
+      const res  = await fetch(WORKER_URL + '/verify-otp', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ pin: pendingPin, code }),
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        sessionToken    = data.token;
+        currentProvider = { name: data.name, role: data.role };
+        pendingPin = null;
+        document.getElementById('otpModal').classList.remove('open');
+        showProviderDashboard();
+      } else if (data.error === 'locked') {
+        errEl.textContent = 'Too many wrong attempts. Request a new code below.';
+      } else if (data.error === 'expired') {
+        errEl.textContent = 'That code expired. Request a new one below.';
+      } else {
+        errEl.textContent = 'Incorrect code — try again.';
+        document.getElementById('otpInput').value = '';
+        document.getElementById('otpInput').focus();
+      }
+    } catch (_) {
+      errEl.textContent = 'Connection error — check your internet and try again.';
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = 'Verify →'; }
+    }
+  }
+
+  async function resendOtp() {
+    if (otpResendCooldown || !pendingPin) return;
+    const errEl = document.getElementById('otpError');
+    const btn   = document.getElementById('resendBtn');
+    otpResendCooldown = true;
+    let seconds = 30;
+    btn.disabled = true;
+    btn.textContent = 'Resend in ' + seconds + 's';
+    const tick = setInterval(() => {
+      seconds -= 1;
+      if (seconds <= 0) {
+        clearInterval(tick);
+        btn.disabled = false;
+        btn.textContent = 'Resend code';
+        otpResendCooldown = false;
+      } else {
+        btn.textContent = 'Resend in ' + seconds + 's';
+      }
+    }, 1000);
+
+    try {
+      const res  = await fetch(WORKER_URL + '/resend-otp', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ pin: pendingPin }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        errEl.textContent = '';
+      } else if (data.error === 'rate_limited') {
+        errEl.textContent = 'Please wait before requesting another code.';
+      } else {
+        errEl.textContent = 'Could not resend — try again shortly.';
+      }
+    } catch (_) {
+      errEl.textContent = 'Connection error — check your internet and try again.';
+    }
+  }
+
+  // ── Session-aware fetch helper ────────────────────────────────────
+  async function authedFetch(path, payload) {
+    const res  = await fetch(WORKER_URL + path, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ token: sessionToken, ...payload }),
+    });
+    const data = await res.json();
+    if (data.ok === false && data.error === 'unauthorized') {
+      sessionExpired();
+      throw new Error('unauthorized');
+    }
+    return data;
+  }
+
+  function sessionExpired() {
+    sessionToken    = null;
+    currentProvider = null;
+    show('home');
+    openPinModal();
+    document.getElementById('pinError').textContent = 'Your session expired — please log in again.';
+  }
+
+  function providerLogout() {
+    sessionToken    = null;
+    currentProvider = null;
+    show('home');
+  }
+
+  // ── Provider Dashboard ─────────────────────────────────────────────
+  function showProviderDashboard() {
+    document.getElementById('dashBadgeName').textContent = currentProvider.name;
+    document.getElementById('dashBadgeRole').textContent = currentProvider.role;
+    show('dashboard');
+  }
+
+  function startVisitLog() {
+    show('complete');
+    document.getElementById('providerBadgeName').textContent = currentProvider.name;
+    document.getElementById('providerBadgeRole').textContent = currentProvider.role;
+    document.getElementById('v-date').valueAsDate = new Date();
+    initPads();
+    loadClientSelectOptions();
+  }
+
+  // ── Client Profiles ────────────────────────────────────────────────
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str || '';
+    return d.innerHTML;
+  }
+
+  function tierClass(tier) {
+    if (tier === 'Enhanced Support') return 'tier-enhanced';
+    if (tier === 'Complex/Safety-Support') return 'tier-complex';
+    return 'tier-standard';
+  }
+
+  async function showClientList() {
+    show('clients');
+    document.getElementById('clientDetailView').style.display = 'none';
+    document.getElementById('newClientView').style.display    = 'none';
+    document.getElementById('editClientView').style.display   = 'none';
+    document.getElementById('clientListView').style.display   = 'block';
+    document.getElementById('clientsBadgeName').textContent = currentProvider.name;
+    document.getElementById('clientsBadgeRole').textContent = currentProvider.role;
+    await loadClientList();
+  }
+
+  function debouncedClientSearch() {
+    clearTimeout(clientSearchTimer);
+    clientSearchTimer = setTimeout(loadClientList, 300);
+  }
+
+  async function loadClientList() {
+    const errEl   = document.getElementById('clientListError');
+    const emptyEl = document.getElementById('clientListEmpty');
+    const listEl  = document.getElementById('clientCards');
+    errEl.style.display = 'none';
+    try {
+      const search = document.getElementById('clientSearchInput').value.trim();
+      const data = await authedFetch('/clients-list', { search });
+      if (!data.ok) { errEl.textContent = 'Could not load clients.'; errEl.style.display = 'block'; return; }
+      clientListCache = data.clients;
+      listEl.innerHTML = '';
+      emptyEl.style.display = data.clients.length ? 'none' : 'block';
+      data.clients.forEach(c => {
+        const card = document.createElement('div');
+        card.className = 'client-card';
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.onclick = () => openClientDetail(c.id);
+        card.onkeydown = (e) => { if (e.key === 'Enter') openClientDetail(c.id); };
+        card.innerHTML =
+          '<div class="cc-name">' + escapeHtml(c.fullName) + '</div>' +
+          '<span class="tier-badge ' + tierClass(c.careTier) + '">' + escapeHtml(c.careTier) + '</span>' +
+          '<div class="cc-meta">' + (c.lastVisitDate ? 'Last visit: ' + escapeHtml(c.lastVisitDate) : 'No visits yet') + '</div>';
+        listEl.appendChild(card);
+      });
+    } catch (_) { /* sessionExpired() already handled the unauthorized case */ }
+  }
+
+  async function openClientDetail(id) {
+    currentClientId = id;
+    try {
+      const data = await authedFetch('/client-detail', { clientId: id });
+      if (!data.ok) return;
+      document.getElementById('clientListView').style.display   = 'none';
+      document.getElementById('clientDetailView').style.display = 'block';
+
+      const c = data.client;
+      document.getElementById('clientDetailHeader').innerHTML =
+        '<h3>' + escapeHtml(c.fullName) + '</h3>' +
+        '<span class="tier-badge ' + tierClass(c.careTier) + '">' + escapeHtml(c.careTier) + '</span>' +
+        (c.address ? '<div class="cc-meta">' + escapeHtml(c.address) + '</div>' : '') +
+        (c.careTierNotes ? '<div class="tier-notes">' + escapeHtml(c.careTierNotes) + '</div>' : '');
+
+      document.getElementById('clientEditControls').style.display =
+        currentProvider.role === 'Owner' ? 'block' : 'none';
+
+      const histEl = document.getElementById('clientVisitHistory');
+      if (!data.visits.length) {
+        histEl.innerHTML = '<p style="color:var(--subtle);font-size:14px;">No visits logged yet.</p>';
+      } else {
+        histEl.innerHTML = data.visits.map(v =>
+          '<div class="visit-entry">' +
+            '<div class="ve-date">' + escapeHtml(v.visitDate) + ' &middot; ' + escapeHtml(v.duration) + ' &middot; ' + escapeHtml(v.providerName) + '</div>' +
+            '<div class="ve-services">' + escapeHtml(v.services) + '</div>' +
+            (v.internalNotes ? '<div class="ve-internal"><strong>Caregiver notes:</strong> ' + escapeHtml(v.internalNotes) + '</div>' : '') +
+          '</div>'
+        ).join('');
+      }
+    } catch (_) { /* handled */ }
+  }
+
+  function openNewClientForm() {
+    document.getElementById('clientListView').style.display = 'none';
+    document.getElementById('newClientView').style.display  = 'block';
+    document.getElementById('newClientName').value       = '';
+    document.getElementById('newClientEmail').value      = '';
+    document.getElementById('newClientAddress').value    = '';
+    document.getElementById('newClientTierNotes').value  = '';
+    document.getElementById('newClientTier').value       = 'Standard';
+    const isOwner = currentProvider.role === 'Owner';
+    document.getElementById('ownerTierGroup').style.display      = isOwner ? 'block' : 'none';
+    document.getElementById('ownerTierNotesGroup').style.display = isOwner ? 'block' : 'none';
+    document.getElementById('tierDefaultNote').style.display     = isOwner ? 'none'  : 'block';
+    document.getElementById('newClientError').style.display = 'none';
+  }
+
+  function closeNewClientForm() {
+    document.getElementById('newClientView').style.display  = 'none';
+    document.getElementById('clientListView').style.display = 'block';
+  }
+
+  async function submitNewClient() {
+    const errEl = document.getElementById('newClientError');
+    const name  = document.getElementById('newClientName').value.trim();
+    const email = document.getElementById('newClientEmail').value.trim();
+    if (!name || !email) {
+      errEl.textContent = 'Name and family email are required.';
+      errEl.style.display = 'block';
+      return;
+    }
+    try {
+      const payload = { fullName: name, familyEmail: email, address: document.getElementById('newClientAddress').value.trim() };
+      if (currentProvider.role === 'Owner') {
+        payload.careTier      = document.getElementById('newClientTier').value;
+        payload.careTierNotes = document.getElementById('newClientTierNotes').value.trim();
+      }
+      const data = await authedFetch('/client-create', payload);
+      if (!data.ok) { errEl.textContent = 'Could not save client — please try again.'; errEl.style.display = 'block'; return; }
+      closeNewClientForm();
+      await loadClientList();
+    } catch (_) { /* handled */ }
+  }
+
+  async function openEditClientForm() {
+    try {
+      const data = await authedFetch('/client-detail', { clientId: currentClientId });
+      if (!data.ok) return;
+      const c = data.client;
+      document.getElementById('editClientName').value      = c.fullName;
+      document.getElementById('editClientEmail').value     = c.familyEmail;
+      document.getElementById('editClientAddress').value   = c.address || '';
+      document.getElementById('editClientTier').value      = c.careTier;
+      document.getElementById('editClientTierNotes').value = c.careTierNotes || '';
+      document.getElementById('clientDetailView').style.display = 'none';
+      document.getElementById('editClientView').style.display   = 'block';
+    } catch (_) { /* handled */ }
+  }
+
+  function closeEditClientForm() {
+    document.getElementById('editClientView').style.display   = 'none';
+    document.getElementById('clientDetailView').style.display = 'block';
+  }
+
+  async function submitEditClient() {
+    const errEl = document.getElementById('editClientError');
+    try {
+      const data = await authedFetch('/client-update', {
+        clientId:      currentClientId,
+        fullName:      document.getElementById('editClientName').value.trim(),
+        familyEmail:   document.getElementById('editClientEmail').value.trim(),
+        address:       document.getElementById('editClientAddress').value.trim(),
+        careTier:      document.getElementById('editClientTier').value,
+        careTierNotes: document.getElementById('editClientTierNotes').value.trim(),
+      });
+      if (!data.ok) {
+        errEl.textContent = data.error === 'forbidden' ? 'Only the Owner can edit client profiles.' : 'Could not save changes.';
+        errEl.style.display = 'block';
+        return;
+      }
+      closeEditClientForm();
+      await openClientDetail(currentClientId);
+    } catch (_) { /* handled */ }
+  }
+
+  async function deleteClient() {
+    if (!confirm('Remove this client profile? Visit history is kept for records but the client will no longer appear in lists.')) return;
+    try {
+      const data = await authedFetch('/client-delete', { clientId: currentClientId });
+      if (!data.ok) { alert('Only the Owner can delete client profiles.'); return; }
+      showClientList();
+    } catch (_) { /* handled */ }
+  }
+
+  async function loadClientSelectOptions() {
+    const sel = document.getElementById('v-client-select');
+    sel.innerHTML = '<option value="" disabled selected>Loading clients…</option>';
+    document.getElementById('v-new-client-name-group').style.display = 'none';
+    try {
+      const data = await authedFetch('/clients-list', {});
+      sel.innerHTML = '<option value="" disabled selected>Select a client…</option>';
+      (data.clients || []).forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.fullName;
+        opt.dataset.email = c.familyEmail;
+        sel.appendChild(opt);
+      });
+      const newOpt = document.createElement('option');
+      newOpt.value = '__new__';
+      newOpt.textContent = '+ Add a new client…';
+      sel.appendChild(newOpt);
+    } catch (_) {
+      sel.innerHTML = '<option value="" disabled selected>Could not load clients</option>';
+    }
+  }
+
+  function onClientSelectChange() {
+    const sel   = document.getElementById('v-client-select');
+    const isNew = sel.value === '__new__';
+    document.getElementById('v-new-client-name-group').style.display = isNew ? 'block' : 'none';
+    const emailInput = document.getElementById('v-email');
+    if (isNew) {
+      emailInput.value = '';
+      emailInput.readOnly = false;
+    } else if (sel.value) {
+      emailInput.value = sel.options[sel.selectedIndex].dataset.email || '';
+      emailInput.readOnly = true;
+    }
+  }
+
+  async function proceedFromStep1() {
+    const sel      = document.getElementById('v-client-select');
+    const isNew    = sel.value === '__new__';
+    const newName  = document.getElementById('v-new-client-name').value.trim();
+    const email    = document.getElementById('v-email').value.trim();
+    const date     = document.getElementById('v-date').value;
+    const duration = document.getElementById('v-duration').value;
+    const checked  = [...document.querySelectorAll('#vstep-1 .svc-check-item input:checked')];
+    const notes    = document.getElementById('v-notes').value.trim();
+    const internalNotes = document.getElementById('v-internal-notes').value.trim();
+    const errEl    = document.getElementById('v-step1-error');
+
+    const hasClient = isNew ? !!newName : !!sel.value;
+    if (!hasClient || !email || !date || !duration || checked.length === 0 || !notes) {
+      errEl.style.display = 'block';
+      return;
+    }
+    errEl.style.display = 'none';
+
+    const btn = document.getElementById('step1NextBtn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Please wait…'; }
+
+    let clientId, clientName;
+    try {
+      if (isNew) {
+        const data = await authedFetch('/client-create', { fullName: newName, familyEmail: email });
+        if (!data.ok) { errEl.textContent = 'Could not create client — please try again.'; errEl.style.display = 'block'; return; }
+        clientId   = data.client.id;
+        clientName = newName;
+      } else {
+        clientId   = Number(sel.value);
+        clientName = sel.options[sel.selectedIndex].textContent;
+      }
+    } catch (_) {
+      return; // unauthorized already handled inside authedFetch
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = 'Next: Provider Signature →'; }
+    }
+
+    visitData = {
+      client: clientName,
+      clientId,
+      email,
+      date,
+      duration,
+      services:     checked.map(c => c.value).join(', '),
+      notes,
+      internalNotes,
+      wave:         document.getElementById('v-wave').value.trim(),
+      providerName: currentProvider ? currentProvider.name : 'Unknown',
+      providerRole: currentProvider ? currentProvider.role : ''
+    };
+
+    goToStep(2);
   }
 
   function initPads() {
@@ -2033,34 +2746,9 @@
   }
 
   function goToStep(n) {
-    // Validate before leaving step 1
-    if (n > 1) {
-      const client   = document.getElementById('v-client').value.trim();
-      const email    = document.getElementById('v-email').value.trim();
-      const date     = document.getElementById('v-date').value;
-      const duration = document.getElementById('v-duration').value;
-      const checked  = [...document.querySelectorAll('#vstep-1 .svc-check-item input:checked')];
-      const notes    = document.getElementById('v-notes').value.trim();
-      const errEl    = document.getElementById('v-step1-error');
-
-      if (!client || !email || !date || !duration || checked.length === 0 || !notes) {
-        errEl.style.display = 'block';
-        if (n !== 1) { goToStep(1); return; }
-        return;
-      }
-      errEl.style.display = 'none';
-      visitData = {
-        client,
-        email,
-        date,
-        duration,
-        services:     checked.map(c => c.value).join(', '),
-        notes,
-        wave:         document.getElementById('v-wave').value.trim(),
-        providerName: currentProvider ? currentProvider.name : 'Unknown',
-        providerRole: currentProvider ? currentProvider.role : ''
-      };
-    }
+    // Step 1's fields (including client selection/creation) are validated and built into
+    // visitData once, in proceedFromStep1() — this function only handles UI switching and
+    // the step-2 signature check below.
 
     // Validate provider signature before leaving step 2
     if (n > 2) {
@@ -2178,6 +2866,8 @@
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({
+          token:    sessionToken,
+          clientId: visitData.clientId,
           visitData: {
             ...visitData,
             dateFormatted,
@@ -2193,6 +2883,10 @@
         document.getElementById('sendingOverlay').style.display  = 'none';
         document.getElementById('sentOverlay').style.display     = 'block';
         document.getElementById('sentMsg').textContent = 'Signed visit record emailed to ' + visitData.email;
+      } else if (data.error === 'unauthorized') {
+        document.getElementById('sendingOverlay').style.display    = 'none';
+        document.getElementById('sendErrorOverlay').style.display  = 'block';
+        document.getElementById('sendErrorMsg').textContent = 'Your session expired — please log in again to resend.';
       } else {
         throw new Error(data.error || 'Worker returned an error — please try again.');
       }
@@ -2205,13 +2899,16 @@
   }
 
   function resetVisitForm() {
-    ['v-client','v-email','v-date','v-duration','v-notes','v-wave'].forEach(id => {
+    ['v-email','v-date','v-duration','v-notes','v-internal-notes','v-wave','v-new-client-name'].forEach(id => {
       const el = document.getElementById(id);
       if (el.tagName === 'SELECT') el.selectedIndex = 0;
       else el.value = '';
     });
+    document.getElementById('v-email').readOnly = false;
+    document.getElementById('v-new-client-name-group').style.display = 'none';
     document.querySelectorAll('#vstep-1 .svc-check-item input').forEach(c => c.checked = false);
     document.getElementById('v-date').valueAsDate = new Date();
+    loadClientSelectOptions();
     if (providerPad) { providerPad.clear(); document.getElementById('providerPlaceholder').style.opacity = '1'; }
     if (clientPad)   { clientPad.clear();   document.getElementById('clientPlaceholder').style.opacity  = '1'; }
     // Reset typed-name sig inputs and toggle state
