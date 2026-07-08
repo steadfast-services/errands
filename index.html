@@ -767,9 +767,30 @@
     footer a { color: #b8d4f0; text-decoration: none; transition: color 0.2s; }
     footer a:hover { color: white; }
     footer small { color: #4a6a8a; font-size: 12px; display: block; margin-top: 4px; line-height: 1.5; }
-    footer .footer-links { margin-top: 8px; }
+    footer .footer-links { margin-top: 8px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; }
     footer .footer-links a { font-size: 12px; color: #4a6a8a; margin: 0 8px; }
     footer .footer-links a:hover { color: #b8d4f0; }
+    footer .footer-links .sep { color: #2a4a6a; }
+
+    footer .footer-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--gold);
+      font-weight: 700;
+      font-size: 13px;
+      padding: 6px 14px;
+      border: 1.5px solid rgba(240,165,0,0.45);
+      border-radius: 20px;
+      background: rgba(240,165,0,0.08);
+      transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+    }
+    footer .footer-cta:hover {
+      background: rgba(240,165,0,0.16);
+      border-color: var(--gold);
+      color: var(--gold2);
+      transform: translateY(-1px);
+    }
 
     /* ── PRIVACY POLICY ── */
     .privacy-card {
@@ -1314,6 +1335,7 @@
       <li><a href="#" onclick="show('book')"     id="nav-book">Book a Service</a></li>
       <li><a href="#" onclick="openProviderPortal()" id="nav-complete" class="nav-provider">🔐 Provider Portal</a></li>
       <li><a href="#" onclick="show('privacy')" id="nav-privacy"  style="display:none;">Privacy</a></li>
+      <li><a href="#" onclick="show('join')"    id="nav-join"     style="display:none;">Join Our Team</a></li>
       <li><a href="#" onclick="show('dashboard')" id="nav-dashboard" style="display:none;">Dashboard</a></li>
       <li><a href="#" onclick="show('clients')" id="nav-clients" style="display:none;">Client Profiles</a></li>
     </ul>
@@ -1768,6 +1790,86 @@
     </div>
   </section>
 
+  <!-- JOIN OUR TEAM (SUBCONTRACTOR INTEREST) -->
+  <section class="section" id="join">
+    <div class="page-h">
+      <div class="eyebrow">Now Hiring — Companion &amp; Errand Providers</div>
+      <h2>Help Seniors Stay Independent. Earn Doing It.</h2>
+      <p>We're looking for warm, reliable people to join our team as independent contractors — helping seniors across Massachusetts with errands, transportation, and companionship. Flexible hours, meaningful work, and the chance to be the reason someone's parent stays safely independent at home.</p>
+    </div>
+
+    <div class="promise-strip">
+      <div class="promise-card">
+        <span class="pc-icon">🗓️</span>
+        <div class="pc-title">Flexible 1099 Work</div>
+        <div class="pc-desc">Set your own hours and choose which visits you take on — work around your life, not the other way around.</div>
+      </div>
+      <div class="promise-card">
+        <span class="pc-icon">💵</span>
+        <div class="pc-title">$20–22/Hour to Start</div>
+        <div class="pc-desc">Plus the full IRS mileage deduction on top — a real independent-contractor rate, paid promptly.</div>
+      </div>
+      <div class="promise-card">
+        <span class="pc-icon">❤️</span>
+        <div class="pc-title">Work That Actually Matters</div>
+        <div class="pc-desc">No medical tasks — just groceries, rides, prescriptions, and company. Real relationships, not a rotating gig-app roster.</div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <h2>Tell Us About Yourself</h2>
+      <p class="form-sub">Fill out the form below and we'll reach out directly by phone or email within a few days to talk next steps. This is just a conversation to start — no automatic hiring, no obligation.</p>
+
+      <form id="joinForm" action="https://formspree.io/f/mgojkrae" method="POST">
+        <input type="hidden" name="_subject" value="Subcontractor Interest from {{name}} – Steadfast Senior Services"/>
+        <div class="f-grid">
+          <div class="f-group">
+            <label>Your Name <span class="req">*</span></label>
+            <input type="text" name="name" placeholder="Jane Smith" required/>
+          </div>
+          <div class="f-group">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" name="phone" placeholder="(555) 000-0000" required/>
+          </div>
+          <div class="f-group full">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" name="email" placeholder="you@email.com" required/>
+          </div>
+          <div class="f-group">
+            <label>City / Town You're Based Near <span class="req">*</span></label>
+            <input type="text" name="location" placeholder="Norwood, MA" required/>
+          </div>
+          <div class="f-group">
+            <label>Do You Have Reliable Transportation? <span class="req">*</span></label>
+            <select name="has_vehicle" required>
+              <option value="" disabled selected>Select…</option>
+              <option>Yes, my own car</option>
+              <option>No, I'd need rides to visits</option>
+            </select>
+          </div>
+          <div class="f-group full">
+            <label>General Availability</label>
+            <input type="text" name="availability" placeholder="e.g. Weekday mornings, weekends"/>
+          </div>
+          <div class="f-group full">
+            <label>Tell Us a Bit About Yourself <span class="req">*</span></label>
+            <textarea name="message" placeholder="Any caregiving, driving, or customer-service experience — and why this kind of work interests you." required></textarea>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit" id="joinBtn">Submit My Interest →</button>
+        <div class="form-note">We review every submission personally and follow up directly — usually within a few days.</div>
+        <div class="form-error" id="joinError" role="alert" aria-live="assertive">Something went wrong. Please try again or call us directly.</div>
+      </form>
+
+      <div class="form-success" id="joinSuccess" role="status" aria-live="polite">
+        <span class="s-icon">🤝</span>
+        <h3>Thanks for Reaching Out!</h3>
+        <p>We've received your information and will contact you directly within a few days to talk next steps.</p>
+        <button class="reset-btn" onclick="resetForm('joinForm','joinSuccess')">Submit Another Response</button>
+      </div>
+    </div>
+  </section>
+
   <!-- COMPLETE VISIT (PROVIDER PORTAL) -->
   <section class="section" id="complete">
 
@@ -2139,6 +2241,8 @@
   <small>© 2026 Steadfast Senior Services. All rights reserved.</small>
   <div class="footer-links">
     <a href="#" onclick="show('privacy')">Privacy Policy</a>
+    <span class="sep">|</span>
+    <a href="#" onclick="show('join')" class="footer-cta">🤝 Help Seniors Stay Independent. Earn Doing It.</a>
   </div>
 </footer>
 
@@ -2226,6 +2330,7 @@
   wireForm('homeBookingForm', 'homeBookingBtn', 'homeBookingSuccess', 'homeBookingError', 'Request a Booking →');
   wireForm('inquiryForm',     'inquiryBtn',     'inquirySuccess',     'inquiryError',     'Send My Question →');
   wireForm('bookingForm',     'bookingBtn',     'bookingSuccess',     'bookingError',     'Submit Service Request →');
+  wireForm('joinForm',        'joinBtn',        'joinSuccess',        'joinError',        'Submit My Interest →');
 
   // ── Provider Portal ──────────────────────────────────────────────
   // All secrets (PINs, API keys, EmailJS credentials) live in the Cloudflare Worker.
