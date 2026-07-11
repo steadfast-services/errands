@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Steadfast Senior Services – Inquiries & Bookings</title>
-  <meta name="description" content="Trusted senior errand & companion care across Massachusetts — CORI checked, fully insured. Book a visit today."/>
+  <title>Senior Companion Care & Errand Services in Massachusetts | Steadfast Senior Services</title>
+  <meta name="description" content="Non-medical senior companion care, errands, grocery shopping & medical transport across Massachusetts. Same provider every visit, CORI-checked, insured, no contracts. Free 30-min consultation — call (781) 929-4623."/>
   <meta property="og:title" content="Steadfast Senior Services"/>
   <meta property="og:description" content="Trusted senior errand & companion care serving all of Massachusetts."/>
   <meta property="og:type" content="website"/>
@@ -639,6 +639,18 @@
 
     .rate-num sup { font-size: 24px; vertical-align: top; margin-top: 10px; }
     .rate-num small { font-size: 16px; color: #b8d4f0; font-family: 'Open Sans', sans-serif; font-weight: 400; }
+
+    /* ── FAQ ── */
+    .faq-item {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .faq-item h3 { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .faq-item p { font-size: 14px; color: var(--subtle); line-height: 1.6; }
 
     /* ── FORMS ── */
     .form-card {
@@ -1353,6 +1365,8 @@
     <ul class="nav-links" id="navLinks">
       <li><a href="#" onclick="show('home')"     id="nav-home"     class="active">Home</a></li>
       <li><a href="#" onclick="show('services')" id="nav-services">Our Services</a></li>
+      <li><a href="#" onclick="show('about')"     id="nav-about">About Us</a></li>
+      <li><a href="#" onclick="show('faq')"       id="nav-faq">FAQ</a></li>
       <li><a href="#" onclick="show('inquire')"  id="nav-inquire">Ask a Question</a></li>
       <li><a href="#" onclick="show('book')"     id="nav-book">Book a Service</a></li>
       <li><a href="#" onclick="openProviderPortal()" id="nav-complete" class="nav-provider">🔐 Provider Portal</a></li>
@@ -1375,7 +1389,7 @@
       <div class="hero-left">
         <div class="eyebrow">Serving All of Massachusetts</div>
         <h1>Helping Seniors Stay<br>Independent &amp; Connected</h1>
-        <p>Steadfast Senior Services delivers reliable, one-on-one errand and companion support across Massachusetts — so your loved ones can thrive at home with the peace of mind your family deserves.</p>
+        <p>Steadfast Senior Services delivers reliable, one-on-one errand and companion support across Massachusetts — the same trusted provider every visit, CORI-checked and insured, so your loved one can thrive at home and your family gets real peace of mind.</p>
         <div class="hero-contact">
           <a href="tel:7819294623" aria-label="Call or text (781) 929-4623"><span class="hc-icon">📞</span>(781) 929-4623</a>
           <a href="mailto:steadfastseniorservices@gmail.com"><span class="hc-icon">✉</span>steadfastseniorservices@gmail.com</a>
@@ -1432,7 +1446,7 @@
           <div class="hiw-num">2</div>
           <div>
             <strong>Meet Your Dedicated Provider</strong>
-            <span>Free 30-min consultation first. Then the same trusted person shows up, every time.</span>
+            <span>Free 30-min consultation first — we'll talk through your loved one's routine, needs, and what a visit should look like. Then the same trusted person shows up, every time.</span>
           </div>
         </div>
         <div class="hiw-step">
@@ -1548,7 +1562,7 @@
         <div class="trust-badges">
           <div class="trust-badge"><span class="tb-icon">🔒</span>CORI Background Checked</div>
           <div class="trust-badge"><span class="tb-icon">🛡️</span>Fully Insured</div>
-          <div class="trust-badge"><span class="tb-icon">📍</span>40-Mile Radius</div>
+          <div class="trust-badge"><span class="tb-icon">📍</span>Serving All of MA</div>
           <div class="trust-badge"><span class="tb-icon">📅</span>7-Day Availability</div>
         </div>
       </div>
@@ -1578,7 +1592,7 @@
         <div class="sc-icon">🚑</div>
         <div>
           <h3>Medical Appointment Transport</h3>
-          <p>Door-to-door rides to doctor visits, labs, and specialist appointments — with wait time and escort assistance so no one goes alone.</p>
+          <p>Door-to-door rides to doctor visits, labs, and specialist appointments anywhere in Massachusetts — with wait time and escort assistance so no one goes alone.</p>
         </div>
       </div>
       <div class="svc-card">
@@ -1617,6 +1631,59 @@
         <p>No hidden fees. No contracts.<br>Free 30-minute consultation to discuss your family's needs.</p>
       </div>
       <div class="rate-num"><sup>$</sup>38<small>/hr</small></div>
+    </div>
+  </section>
+
+  <!-- ABOUT US -->
+  <section class="section" id="about">
+    <div class="page-h">
+      <div class="eyebrow">Who We Are</div>
+      <h2>About Steadfast Senior Services</h2>
+      <p>Steadfast Senior Services is a locally owned, non-medical companion and errand care provider based in Norwood, MA, serving families across Massachusetts. We help older adults stay safe, independent, and connected at home through grocery shopping, medical appointment transportation, prescription pickups, companionship visits, errands, and wellness check-in calls. Every provider is CORI background-checked and fully insured, and every client keeps the same familiar face for every visit — never a rotating roster. Our goal is simple: make everyday life easier for seniors, and give families real peace of mind.</p>
+    </div>
+
+    <div class="svc-full-grid" style="grid-template-columns: 1fr;">
+      <div class="svc-card">
+        <div class="sc-icon">⚓</div>
+        <div>
+          <h3>Meet Your Provider</h3>
+          <p>Steadfast is locally owned and operated in Norwood, MA. Every provider — including the owner — is CORI background-checked and fully insured, so the same trusted, familiar face shows up for every visit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="page-h">
+      <div class="eyebrow">Common Questions</div>
+      <h2>Frequently Asked Questions</h2>
+      <p>Answers to the questions families ask most before booking their first visit.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>What areas do you serve?</h3>
+      <p>We serve families across Massachusetts. Not sure if we cover your area? Call or text (781) 929-4623 and we'll let you know.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What does a visit cost?</h3>
+      <p>Rates start at $38/hour, confirmed during your free 30-minute consultation — no hidden fees.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Is there a minimum number of hours?</h3>
+      <p>No. Book a single one-time visit or ongoing weekly support — no contracts, no lock-in.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Are providers background-checked?</h3>
+      <p>Yes — every provider is CORI background-checked and fully insured before working with clients.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Do you provide medical care?</h3>
+      <p>No — Steadfast is non-medical only (see our Terms of Service for full scope). We handle errands, transportation, companionship, and prescription pickup, not medication administration.</p>
+    </div>
+    <div class="faq-item">
+      <h3>How do I get started?</h3>
+      <p>Call or text (781) 929-4623 or submit the booking form — we confirm within 24 hours and start with a free consultation.</p>
     </div>
   </section>
 
@@ -2312,6 +2379,8 @@
     <a href="#" onclick="show('privacy')">Privacy Policy</a>
     <span class="sep">|</span>
     <a href="#" onclick="show('terms')">Terms of Service</a>
+    <span class="sep">|</span>
+    <a href="#" onclick="show('book')" class="footer-cta">💙 Need care for a loved one? Book a free consultation →</a>
     <span class="sep">|</span>
     <a href="#" onclick="show('join')" class="footer-cta">🤝 Help Seniors Stay Independent. Earn Doing It.</a>
   </div>
