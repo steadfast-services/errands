@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://steadfast-services.github.io/errands/sitemap.xml
+Sitemap: https://steadfastseniorservices.com/sitemap.xml
