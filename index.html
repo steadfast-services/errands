@@ -1843,7 +1843,7 @@
         <li><strong>Gmail / Google</strong> — our business email provider</li>
         <li><strong>Wave</strong> (waveapps.com) — invoicing and payment processing</li>
         <li><strong>Cloudflare</strong> (cloudflare.com) — securely stores client profiles and visit history so caregivers can review a client's care needs before a visit; also handles provider login verification</li>
-        <li><strong>Tawk.to</strong> (tawk.to) — powers the live chat widget on this site; chat messages you send are processed through their service</li>
+        <li><strong>Anthropic</strong> (anthropic.com) — powers the support chat widget on this site; messages you send in chat are processed through their Claude API to generate responses</li>
       </ul>
 
       <h3>Data Security</h3>
@@ -3175,32 +3175,125 @@
   }
 </script>
 
-<!--
-  ═══════════════════════════════════════════════════════════════
-  LIVE TWO-WAY CHAT — Tawk.to (100% free, no credit card)
-  ═══════════════════════════════════════════════════════════════
-  Setup (5 minutes):
-  1. Go to tawk.to and sign up with steadfastseniorservices@gmail.com
-  2. Create a property named "Steadfast Senior Services"
-  3. Copy your Property ID and Widget/Chat ID from the widget embed code
-  4. Replace YOUR_PROPERTY_ID and YOUR_WIDGET_ID below, then save & redeploy
+<!-- ═══════════════════════════════════════════════════════════════
+     SUPPORT CHAT — answers from our knowledge base, hands off to a
+     human by email when it can't answer. Backed by the same Worker
+     as the provider portal (see WORKER_URL above).
+     ═══════════════════════════════════════════════════════════════ -->
+<style>
+  #chatBubble {
+    position: fixed; right: 20px; bottom: 20px; z-index: 999;
+    width: 58px; height: 58px; border-radius: 50%; border: none;
+    background: linear-gradient(135deg, var(--navy), var(--blue));
+    color: white; font-size: 26px; cursor: pointer;
+    box-shadow: 0 6px 20px rgba(26,58,92,0.35);
+  }
+  #chatPanel {
+    position: fixed; right: 20px; bottom: 90px; z-index: 999;
+    width: min(360px, calc(100vw - 40px)); height: min(520px, calc(100vh - 140px));
+    background: white; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 12px 40px rgba(26,58,92,0.28);
+    display: none; flex-direction: column;
+    border: 1px solid var(--border);
+  }
+  #chatPanel.open { display: flex; }
+  #chatHeader {
+    background: linear-gradient(135deg, var(--navy), var(--blue));
+    color: white; padding: 14px 16px; font-weight: 700; font-family: Georgia, serif;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  #chatHeader button { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+  #chatLog { flex: 1; overflow-y: auto; padding: 14px; background: var(--bg); }
+  .chat-msg { max-width: 85%; margin-bottom: 10px; padding: 9px 13px; border-radius: 12px; font-size: 14px; line-height: 1.5; }
+  .chat-msg.user { margin-left: auto; background: var(--navy); color: white; border-bottom-right-radius: 3px; }
+  .chat-msg.bot  { margin-right: auto; background: white; color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 3px; }
+  .chat-msg.typing { color: var(--subtle); font-style: italic; }
+  #chatForm { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--border); }
+  #chatInput { flex: 1; border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; font-size: 14px; font-family: inherit; }
+  #chatForm button { background: var(--gold); color: var(--navy); border: none; border-radius: 8px; padding: 0 16px; font-weight: 700; cursor: pointer; }
+  #chatIntro { font-size: 13px; color: var(--subtle); padding: 0 14px 10px; }
+</style>
 
-  Once live:
-  • Visitors see a chat bubble (bottom-right corner of your site)
-  • You receive instant notifications via the Tawk.to mobile app or email
-  • Reply from your phone app → visitor sees your message in real time on the site
-  ═══════════════════════════════════════════════════════════════
--->
-<script type="text/javascript">
-  var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-  (function () {
-    var s1 = document.createElement('script'), s0 = document.getElementsByTagName('script')[0];
-    s1.async = true;
-    s1.src = 'https://embed.tawk.to/6a3f156f4d21e11d45404e4d/1js36nf9h';
-    s1.charset = 'UTF-8';
-    s1.setAttribute('crossorigin', '*');
-    s0.parentNode.insertBefore(s1, s0);
-  })();
+<button id="chatBubble" aria-label="Open support chat" aria-expanded="false">💬</button>
+<div id="chatPanel" role="dialog" aria-label="Support chat">
+  <div id="chatHeader">
+    <span>⚓ Steadfast Support</span>
+    <button id="chatClose" aria-label="Close chat">✕</button>
+  </div>
+  <div id="chatIntro">Ask about services, pricing, coverage area, or anything else — we'll get you an answer or connect you with the team.</div>
+  <div id="chatLog" aria-live="polite"></div>
+  <form id="chatForm">
+    <input id="chatInput" type="text" placeholder="Type a message…" maxlength="2000" autocomplete="off" required />
+    <button type="submit">Send</button>
+  </form>
+</div>
+
+<script>
+(function () {
+  var bubble  = document.getElementById('chatBubble');
+  var panel   = document.getElementById('chatPanel');
+  var closeBt = document.getElementById('chatClose');
+  var log     = document.getElementById('chatLog');
+  var form    = document.getElementById('chatForm');
+  var input   = document.getElementById('chatInput');
+
+  var STORAGE_KEY = 'steadfastChatSessionId';
+  var FALLBACK_MSG = "Sorry, something went wrong on our end. Please call or text us directly at (781) 929-4623, or email steadfastseniorservices@gmail.com.";
+
+  function addMessage(text, role) {
+    var el = document.createElement('div');
+    el.className = 'chat-msg ' + role;
+    el.textContent = text;
+    log.appendChild(el);
+    log.scrollTop = log.scrollHeight;
+    return el;
+  }
+
+  function togglePanel(open) {
+    panel.classList.toggle('open', open);
+    bubble.setAttribute('aria-expanded', String(open));
+    if (open && !log.childElementCount) {
+      addMessage("Hi! How can we help today?", 'bot');
+    }
+    if (open) input.focus();
+  }
+
+  bubble.addEventListener('click', function () { togglePanel(!panel.classList.contains('open')); });
+  closeBt.addEventListener('click', function () { togglePanel(false); });
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    addMessage(text, 'user');
+
+    var typingEl = addMessage('…', 'bot typing');
+
+    try {
+      var res = await fetch(WORKER_URL + '/chat', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          sessionId: sessionStorage.getItem(STORAGE_KEY) || '',
+          message:   text,
+        }),
+      });
+      var data = await res.json();
+      typingEl.remove();
+
+      if (data.ok) {
+        if (data.sessionId) sessionStorage.setItem(STORAGE_KEY, data.sessionId);
+        addMessage(data.reply, 'bot');
+      } else {
+        addMessage(FALLBACK_MSG, 'bot');
+      }
+    } catch (err) {
+      typingEl.remove();
+      addMessage(FALLBACK_MSG, 'bot');
+    }
+  });
+})();
 </script>
 
 </body>

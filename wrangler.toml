@@ -1,0 +1,16 @@
+name = "steadfast-services"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+# Fill in with your actual D1 database name/id (find via `wrangler d1 list`,
+# or copy from Workers & Pages → your worker → Settings → Bindings in the
+# Cloudflare dashboard, where the DB binding is already configured today).
+[[d1_databases]]
+binding = "DB"
+database_name = "REPLACE_WITH_YOUR_D1_DATABASE_NAME"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+# Non-secret vars can go here if you want them version-controlled; secrets
+# (ANTHROPIC_API_KEY, EMAILJS_*, IMGBB_KEY, PROVIDERS_JSON) stay out of this
+# file — set them with `wrangler secret put <NAME>` or in the dashboard, same
+# as they're configured today.
