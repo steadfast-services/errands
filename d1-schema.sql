@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS chat_messages (
 CREATE TABLE IF NOT EXISTS chat_leads (
   id             INTEGER PRIMARY KEY AUTOINCREMENT,
   session_id     TEXT NOT NULL REFERENCES chat_sessions(id),
+  category       TEXT NOT NULL DEFAULT 'general_inquiry',
   name           TEXT,
   contact        TEXT,
   question       TEXT,
@@ -66,6 +67,8 @@ CREATE TABLE IF NOT EXISTS chat_leads (
   emailed        INTEGER NOT NULL DEFAULT 0,
   created_at     TEXT NOT NULL DEFAULT (datetime('now'))
 );
+-- If chat_leads already exists from an earlier deploy, run this once instead:
+-- ALTER TABLE chat_leads ADD COLUMN category TEXT NOT NULL DEFAULT 'general_inquiry';
 
 CREATE TABLE IF NOT EXISTS kb_content (
   id         INTEGER PRIMARY KEY CHECK (id = 1),

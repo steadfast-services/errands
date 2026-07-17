@@ -88,17 +88,24 @@ async function sha256Hex(input) {
 
 const CAPTURE_LEAD_TOOL = {
   name: 'capture_lead',
-  description: "Call this when the visitor's question isn't answered by the knowledge base, or they ask to talk to a person. Only call it once you have at least a phone number or email to reach them — ask for that first if you don't have it yet.",
+  description: "Call this when the visitor's question isn't answered by the knowledge base, they want to book/request service, they're asking about becoming a provider, or they ask to talk to a person. Only call it once you have at least a phone number or email to reach them — ask for that first if you don't have it yet. Classify the category correctly so it reaches the right team.",
   input_schema: {
     type: 'object',
     properties: {
+      category:       { type: 'string', enum: ['booking', 'general_inquiry', 'join_team'], description: "'booking' for scheduling/requesting care service, 'join_team' for provider/job applicants, 'general_inquiry' for anything else the knowledge base doesn't cover" },
       name:           { type: 'string', description: "Visitor's name, if given" },
       contact:        { type: 'string', description: 'Phone number or email to reach them' },
       question:       { type: 'string', description: "Brief summary of what they're asking about" },
       preferred_time: { type: 'string', description: 'Preferred time to be contacted, if mentioned' },
     },
-    required: ['contact', 'question'],
+    required: ['category', 'contact', 'question'],
   },
+};
+
+const LEAD_FORM_ENDPOINTS = {
+  booking:         'https://formspree.io/f/xvzjdjqg', // Family Inquiry
+  general_inquiry: 'https://formspree.io/f/xvzjdjqg', // Family Inquiry
+  join_team:       'https://formspree.io/f/xdaryrdl', // Provider Application
 };
 
 async function callClaude(env, { system, messages, tools }) {
@@ -125,42 +132,24 @@ async function callClaude(env, { system, messages, tools }) {
   return res.json();
 }
 
-async function sendLeadEmail(env, { sessionId, name, contact, question, preferred_time }) {
-  const html = `<p>New chat lead from the website support bot:</p>` +
-    `<p><strong>Name:</strong> ${name || '(not given)'}<br>` +
-    `<strong>Contact:</strong> ${contact || '(not given)'}<br>` +
-    `<strong>Question:</strong> ${question || '(not given)'}<br>` +
-    `<strong>Preferred time to reach them:</strong> ${preferred_time || '(not given)'}</p>` +
-    `<p style="font-size:12px;color:#5a6a7e;">Chat session: ${sessionId}</p>`;
+async function sendLeadEmail(env, { sessionId, category, name, contact, question, preferred_time }) {
+  const endpoint = LEAD_FORM_ENDPOINTS[category] || LEAD_FORM_ENDPOINTS.general_inquiry;
 
-  const res = await fetchWithTimeout('https://api.emailjs.com/api/v1.0/email/send', {
+  const res = await fetchWithTimeout(endpoint, {
     method:  'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
     body:    JSON.stringify({
-      service_id:  env.EMAILJS_SERVICE_ID,
-      template_id: env.EMAILJS_TEMPLATE_ID,
-      user_id:     env.EMAILJS_PUBLIC_KEY,
-      accessToken: env.EMAILJS_PRIVATE_KEY,
-      template_params: {
-        to_email:      'steadfastseniorservices@gmail.com',
-        subject:       `New chat lead: ${name || contact || 'website visitor'}`,
-        client_name:   name || '',
-        provider_name: '',
-        visit_date:    '',
-        duration:      '',
-        services:      '',
-        family_notes:  question || '',
-        provider_sig:  '',
-        client_sig:    '',
-        html_content:  html,
-        wave_text:     '',
-      },
+      name:    name || '(not given via chat)',
+      email:   contact || '',
+      phone:   contact || '',
+      message: `[From support chat, category: ${category}]\n\n${question || '(no question given)'}\n\nPreferred time to reach them: ${preferred_time || '(not given)'}\n\nChat session: ${sessionId}`,
+      _subject: `New chat lead (${category}): ${name || contact || 'website visitor'}`,
     }),
   }, 15000);
 
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`Lead email send failed ${res.status}: ${text}`);
+    throw new Error(`Lead relay to Formspree failed ${res.status}: ${text}`);
   }
 
   await env.DB.prepare('UPDATE chat_leads SET emailed = 1 WHERE session_id = ? AND emailed = 0').bind(sessionId).run();
@@ -555,8 +544,8 @@ export default {
       if (toolUse) {
         const input = toolUse.input || {};
         await env.DB.prepare(
-          'INSERT INTO chat_leads (session_id, name, contact, question, preferred_time) VALUES (?, ?, ?, ?, ?)'
-        ).bind(sessionId, input.name || '', input.contact || '', input.question || '', input.preferred_time || '').run();
+          'INSERT INTO chat_leads (session_id, category, name, contact, question, preferred_time) VALUES (?, ?, ?, ?, ?, ?)'
+        ).bind(sessionId, input.category || 'general_inquiry', input.name || '', input.contact || '', input.question || '', input.preferred_time || '').run();
 
         scheduleBackground(sendLeadEmail(env, { sessionId, ...input }), ctx);
 

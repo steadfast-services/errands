@@ -1,4 +1,4 @@
-# Steadfast Senior Services — Support Knowledge Base
+INSERT INTO kb_content (id, content, updated_at) VALUES (1, '# Steadfast Senior Services — Support Knowledge Base
 
 This document is the source of truth for the AI support chat. It is drafted
 from the content already published on steadfastseniorservices.com
@@ -36,15 +36,15 @@ Location: Norwood, MA
 ## What Steadfast does NOT do
 
 Steadfast is **non-medical only**. It does not provide medical care, nursing
-care, or administer/assist with medication. If a client's needs change to
+care, or administer/assist with medication. If a client''s needs change to
 require medical or clinical care, Steadfast will tell the family so they can
 arrange licensed care elsewhere. If a chat visitor asks about medical/nursing
-needs, say clearly that Steadfast doesn't provide that, and offer to have the
+needs, say clearly that Steadfast doesn''t provide that, and offer to have the
 owner follow up about what they do need.
 
 ## Service area
 
-All of Massachusetts. If a visitor isn't sure their town is covered, tell
+All of Massachusetts. If a visitor isn''t sure their town is covered, tell
 them to call/text (781) 929-4623 to confirm, or capture their info as a lead.
 
 ## Pricing
@@ -52,7 +52,7 @@ them to call/text (781) 929-4623 to confirm, or capture their info as a lead.
 - Rates start at **$38/hour**
 - No hidden fees, no long-term contracts
 - Exact rate confirmed during the free 30-minute consultation, tailored to
-  the client's care needs
+  the client''s care needs
 - No minimum hours — a single one-time visit or ongoing weekly support are
   both fine
 
@@ -66,7 +66,7 @@ them to call/text (781) 929-4623 to confirm, or capture their info as a lead.
 
 ## Cancellation & no-show policy
 
-At least **24 hours' notice** is required to cancel or reschedule a visit.
+At least **24 hours'' notice** is required to cancel or reschedule a visit.
 Visits cancelled with less notice, or where the client is unavailable when
 the provider arrives, may be billed at **50% of the scheduled rate**.
 
@@ -133,8 +133,8 @@ prescription pickup (not medication administration).
 Call/text (781) 929-4623 or submit the booking form — confirmed within 24
 hours, starting with a free consultation.
 
-**What's your cancellation policy?**
-24 hours' notice to cancel/reschedule; less notice or a no-show may be billed
+**What''s your cancellation policy?**
+24 hours'' notice to cancel/reschedule; less notice or a no-show may be billed
 at 50% of the scheduled rate.
 
 **How do I pay?**
@@ -144,29 +144,31 @@ Steadfast directly.
 ## How to use this document (instructions for the assistant, not visitor-facing)
 
 Answer visitor questions using only the facts above. If a question falls
-outside this document — anything about a specific existing client's account,
+outside this document — anything about a specific existing client''s account,
 scheduling a specific date/time, pricing exceptions, complaints, or anything
 not covered here — do not guess or improvise an answer.
 
-When you need to hand off, don't just silently capture their info — actively
+When you need to hand off, don''t just silently capture their info — actively
 mention the matching page on the site so they know it exists, then offer to
 capture their info as the faster in-chat alternative. Match the request to a
 category and phrase it naturally, for example:
 
 - **Ready to book / schedule a visit** → category `booking`. Mention the
-  "Book a Service" page: "It sounds like you're ready to get started — you're
+  "Book a Service" page: "It sounds like you''re ready to get started — you''re
   welcome to fill out our Book a Service form directly, or I can pass this
-  along for you right now if that's easier."
+  along for you right now if that''s easier."
 - **Asking about becoming a provider / a job / working for Steadfast**
-  → category `join_team`. Mention "Join Our Team": "That's handled through
+  → category `join_team`. Mention "Join Our Team": "That''s handled through
   our Join Our Team page — I can also grab your info here and pass it along
-  if you'd rather not switch pages."
+  if you''d rather not switch pages."
 - **Anything else not covered by this document** → category
-  `general_inquiry`. Mention "Ask Us a Question": "You're welcome to use our
+  `general_inquiry`. Mention "Ask Us a Question": "You''re welcome to use our
   Ask Us a Question form, or I can note this down and have the owner follow
-  up directly — whichever's easier for you."
+  up directly — whichever''s easier for you."
 
 Either way, once they give you a way to reach them (phone or email) and
-what they need, call `capture_lead` with the right category — don't make
+what they need, call `capture_lead` with the right category — don''t make
 them choose between the form and the chat, just make both options visible
 and let them pick.
+', datetime('now'))
+  ON CONFLICT(id) DO UPDATE SET content = excluded.content, updated_at = excluded.updated_at;
