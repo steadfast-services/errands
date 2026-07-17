@@ -525,9 +525,20 @@ export default {
         'only source of facts; do not invent policy, pricing, or scheduling details. Follow the "How to use this ' +
         `document" instructions at the end of the knowledge base.\n\n${kbContent}`;
 
+      const nowEastern = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York', weekday: 'long', year: 'numeric', month: 'long',
+        day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true,
+      }).format(new Date());
+
       const requestArgs = {
-        system:  [{ type: 'text', text: systemText, cache_control: { type: 'ephemeral', ttl: '1h' } }],
-        tools:   [CAPTURE_LEAD_TOOL],
+        // Stable KB block stays cached; the current-time block is appended
+        // AFTER the cache breakpoint so it changes every request without
+        // invalidating the cached (expensive) prefix.
+        system: [
+          { type: 'text', text: systemText, cache_control: { type: 'ephemeral', ttl: '1h' } },
+          { type: 'text', text: `Current date/time in Massachusetts (Eastern): ${nowEastern}.` },
+        ],
+        tools: [CAPTURE_LEAD_TOOL],
       };
 
       let claudeResp;

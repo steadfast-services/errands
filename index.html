@@ -31,7 +31,7 @@
       "addressRegion": "MA",
       "addressCountry": "US"
     },
-    "priceRange": "$38/hr"
+    "priceRange": "$38-$60/hr"
   }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
@@ -640,6 +640,19 @@
 
     .rate-num sup { font-size: 24px; vertical-align: top; margin-top: 10px; }
     .rate-num small { font-size: 16px; color: #b8d4f0; font-family: 'Open Sans', sans-serif; font-weight: 400; }
+
+    /* ── PRICING TIERS ── */
+    .pricing-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+    .tier-card {
+      background: white; border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px 20px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .tier-card h4 { font-family: 'Merriweather', serif; font-size: 16px; color: var(--navy); margin-bottom: 4px; }
+    .tier-price { font-family: 'Merriweather', serif; font-size: 30px; font-weight: 900; color: var(--blue); margin: 6px 0; white-space: nowrap; }
+    .tier-price sup { font-size: 16px; vertical-align: top; }
+    .tier-price small { font-size: 13px; color: var(--subtle); font-family: 'Open Sans', sans-serif; font-weight: 400; }
+    .tier-card p { font-size: 13px; color: var(--subtle); line-height: 1.5; }
+    @media (max-width: 700px) { .pricing-tiers { grid-template-columns: 1fr; } }
 
     /* ── FAQ ── */
     .faq-item {
@@ -1578,7 +1591,7 @@
     <div class="page-h">
       <div class="eyebrow">What We Offer</div>
       <h2>Our Services</h2>
-      <p>Every visit is delivered personally — same trusted provider, every time. Serving families across Massachusetts. Rates start at <strong>$38/hour</strong> and are tailored to your loved one's care needs — confirmed during your free 30-minute consultation.</p>
+      <p>Every visit is delivered personally — same trusted provider, every time. Serving families across Massachusetts. Rates start at <strong>$38/hour</strong>, based on the level of support your visit needs — confirmed together during your free 30-minute consultation.</p>
     </div>
 
     <div class="svc-full-grid">
@@ -1629,10 +1642,29 @@
     <div class="rate-box">
       <div>
         <h3>Simple, Transparent Pricing</h3>
-        <p>No hidden fees. No contracts. No weekly hour minimums like larger agencies require.<br>Free 30-minute consultation to discuss your family's needs.</p>
+        <p>No hidden fees. No contracts. No weekly hour minimums like larger agencies require.<br>Your exact rate is confirmed together during your free 30-minute consultation.</p>
       </div>
-      <div class="rate-num"><sup>$</sup>38<small>/hr</small></div>
+      <div class="rate-num"><sup>$</sup>38<small>/hr and up</small></div>
     </div>
+
+    <div class="pricing-tiers">
+      <div class="tier-card">
+        <h4>Standard Care</h4>
+        <div class="tier-price"><sup>$</sup>38<small>/hr</small></div>
+        <p>Grocery shopping, errands, transportation, companionship visits, prescription pickups, and wellness calls — our core services.</p>
+      </div>
+      <div class="tier-card">
+        <h4>Enhanced Care</h4>
+        <div class="tier-price"><sup>$</sup>45&ndash;50<small>/hr</small></div>
+        <p>Visits that call for more hands-on support — physical assistance with mobility, or extra patience and redirection for memory-related needs.</p>
+      </div>
+      <div class="tier-card">
+        <h4>Specialized Care</h4>
+        <div class="tier-price"><sup>$</sup>55&ndash;60<small>/hr</small></div>
+        <p>Situations that call for additional provider training, safety protocols, or extended supervision during the visit.</p>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--subtle);margin-top:14px;text-align:center;">Your tier and exact rate are always worked out together with you during your free 30-minute consultation — never guessed or assumed in advance.</p>
   </section>
 
   <!-- ABOUT US -->
@@ -1668,7 +1700,7 @@
     </div>
     <div class="faq-item">
       <h3>What does a visit cost?</h3>
-      <p>Rates start at $38/hour, confirmed during your free 30-minute consultation — no hidden fees.</p>
+      <p>Rates start at $38/hour for standard visits (errands, transportation, companionship), up to $55&ndash;$60/hour for visits that need more hands-on support or additional provider training. Your exact rate is worked out together during your free 30-minute consultation — no hidden fees, and never guessed in advance.</p>
     </div>
     <div class="faq-item">
       <h3>Is there a minimum number of hours?</h3>
@@ -1687,8 +1719,12 @@
       <p>Call or text (781) 929-4623 or submit the booking form — we confirm within 24 hours and start with a free consultation.</p>
     </div>
     <div class="faq-item">
+      <h3>Can I get same-day service?</h3>
+      <p>We're open 5:00 AM&ndash;11:00 PM and need at least 4 hours' notice, so same-day requests are accepted until 7:00 PM. After that, the earliest we can schedule is the next day. For same-day, call or text (781) 929-4623 directly rather than the online form, so we see it in time.</p>
+    </div>
+    <div class="faq-item">
       <h3>How does your pricing compare to other home care providers?</h3>
-      <p>Non-medical companion care across Massachusetts typically runs $30&ndash;$50/hour, with larger Boston-area agencies often at the higher end and usually requiring a weekly hour minimum (commonly 20+ hours/week) or a monthly package. At $38/hour with no weekly minimum and no contract, Steadfast is priced in line with the market while staying flexible enough for a single one-time visit.</p>
+      <p>Non-medical companion care across Massachusetts typically runs $30&ndash;$50/hour, with larger Boston-area agencies often at the higher end and usually requiring a weekly hour minimum (commonly 20+ hours/week) or a monthly package. Starting at $38/hour, with no weekly minimum and no contract, Steadfast is priced in line with the market while staying flexible enough for a single one-time visit — and unlike a flat rate, your tier reflects what your visit actually needs rather than a one-size-fits-all price.</p>
     </div>
   </section>
 
@@ -1800,7 +1836,7 @@
           </div>
         </div>
         <button type="submit" class="btn-submit" id="bookingBtn">Submit Service Request →</button>
-        <div class="form-note">We'll confirm your appointment within 24 hours.</div>
+        <div class="form-note">We'll confirm your appointment within 24 hours. Need care today? We're open 5:00 AM&ndash;11:00 PM and can take same-day requests until 7:00 PM &mdash; call or text <strong>(781) 929-4623</strong> for same-day so we see it in time.</div>
         <div class="form-error" id="bookingError" role="alert" aria-live="assertive">Something went wrong. Please try again or call us directly.</div>
       </form>
 
@@ -2377,6 +2413,8 @@
   &nbsp;|&nbsp; 💬 Live chat available on this site
   <br>
   Serving all of Massachusetts &nbsp;|&nbsp; Insured · Background Checked · Locally Owned
+  <br>
+  Open 5:00 AM &ndash; 11:00 PM &nbsp;|&nbsp; Same-day requests accepted until 7:00 PM
   <br>
   <small>Deaf or hard of hearing? Text the number above, use the live chat, or dial 711 for Massachusetts Relay.</small>
   <small>© 2026 Steadfast Senior Services. All rights reserved.</small>
