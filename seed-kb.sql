@@ -55,6 +55,17 @@ them to call/text (781) 929-4623 to confirm, or capture their info as a lead.
   the client''s care needs
 - No minimum hours — a single one-time visit or ongoing weekly support are
   both fine
+- **How this compares to the market:** non-medical companion care across
+  Massachusetts generally runs $30-$50/hour, with larger Boston-area
+  agencies often at the higher end of that range. Larger agencies also
+  commonly require a weekly hour minimum (often 20+ hours/week) or a
+  monthly package rather than allowing a single one-time visit. Steadfast''s
+  $38/hour is priced in line with the market, and the real differentiator
+  is flexibility — no weekly minimum, no contract, and the same provider
+  every time rather than a rotating staff roster. If a visitor asks how
+  Steadfast compares to a specific competitor by name, don''t speculate
+  about that competitor''s exact pricing or policies — share the general
+  market range above and offer to have the owner follow up with specifics.
 
 ## Getting started / booking
 
@@ -140,6 +151,12 @@ at 50% of the scheduled rate.
 **How do I pay?**
 Invoices through Wave, per-visit or weekly. No card numbers stored by
 Steadfast directly.
+
+**How does your pricing compare to other home care providers?**
+Massachusetts non-medical companion care generally runs $30-$50/hour;
+Steadfast''s $38/hour is in line with the market. The differentiator is
+flexibility — no weekly hour minimum or contract, unlike many larger
+agencies, and the same provider every visit.
 
 ## How to use this document (instructions for the assistant, not visitor-facing)
 
