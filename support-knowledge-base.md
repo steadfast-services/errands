@@ -15,7 +15,7 @@ background-checked and fully insured. Clients keep the same familiar provider
 for every visit, never a rotating roster.
 
 Phone/text: (781) 929-4623
-Email: steadfastseniorservices@gmail.com
+Email: info@steadfastseniorservices.com
 Location: Norwood, MA
 
 ## Services offered
